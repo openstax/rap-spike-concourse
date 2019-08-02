@@ -1,4 +1,5 @@
 # rap-concourse-spike
+Exploring Concourse-CI’s (Continuous Integration) queue resource for use in the final product of Refactor Archive.
 
 ## Creating the concourse spike development environment
 
@@ -22,13 +23,22 @@ Start the services that are required with Docker Compose:
 
     make services
 
-You'll now have some Docker containers running the PostgreSQL databases for cnx-db and Concourse, the Concourse application, and RabbitMQ. You should be able to see all the services by running:
+You'll now have four Docker containers running the PostgreSQL databases for cnx-db and Concourse, the Concourse application, and RabbitMQ. You should be able to see all the services by running:
 
     docker-compose ps
 
-### Logging into Concourse
+To stop any of the docker containers, obtain the CONTAINER ID by running `docker container ls`, then:
 
-With your browser visit `http://localhost:8080`
+    docker stop [CONTAINER ID]
+
+
+### Access Services
+
+Access the services that have been started by Docker Compose.
+
+#### Concourse 
+
+Log into Concourse with your browser, visit `http://localhost:8080`
 
 Enter the following to login 
 
@@ -37,7 +47,8 @@ username: test
 password: test
 ```
 
-### Logging in with psql shell to cnx-db
+#### Postgres
+Log in with psql shell to cnx-db
 
     make sql
 
