@@ -10,6 +10,9 @@ services:
       PGDATA: /database
 
   concourse:
+    # Note, we use the concourse release candidate, because
+    # the concourse/concourse image has a known flaw.
+    # See also, https://github.com/concourse/concourse/issues/3758
     image: concourse/concourse-rc
     command: quickstart
     privileged: true
