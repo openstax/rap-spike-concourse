@@ -13,4 +13,4 @@ services:
 
 .PHONY: sql
 sql:
-	docker-compose exec cnx-db psql --pset expanded=auto -U postgres
+	docker-compose exec cnx-db /bin/bash -c 'psql --pset expanded=auto $$DB_URL'
