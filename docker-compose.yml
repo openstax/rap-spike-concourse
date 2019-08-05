@@ -30,6 +30,7 @@ services:
 
   cnx-rabbitmq:
     image: rabbitmq:latest
+    ports: ["5672:5672"]
 
   cnx-db:
     image: openstax/cnx-db:latest
