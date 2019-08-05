@@ -38,7 +38,7 @@ Access the services that have been started by Docker Compose.
 
 #### RabbitMQ 
 
-Log into Concourse with your browser, visit `http://localhost:15672`
+Log into RabbitMQ with your browser, visit `http://localhost:15672`
 
 Enter the following to login 
 
