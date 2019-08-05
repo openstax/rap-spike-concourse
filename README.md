@@ -36,6 +36,11 @@ To stop any of the docker containers, obtain the CONTAINER ID by running `docker
 
 Access the services that have been started by Docker Compose.
 
+- Concourse-CI (HTTP): http://localhost:8080
+- RabbitMQ (AMQP): amqp://guest:guest@localhost:5672
+- RabbitMQ Management (HTTP): http://guest:guest@localhost:15672
+- Postgres: postgres://rhaptos@localhost:15432/repository
+
 #### RabbitMQ 
 
 Log into RabbitMQ with your browser, visit `http://localhost:15672`
