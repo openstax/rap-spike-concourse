@@ -36,6 +36,17 @@ To stop any of the docker containers, obtain the CONTAINER ID by running `docker
 
 Access the services that have been started by Docker Compose.
 
+#### RabbitMQ 
+
+Log into Concourse with your browser, visit `http://localhost:15672`
+
+Enter the following to login 
+
+```
+username: guest
+password: guest
+```
+
 #### Concourse 
 
 Log into Concourse with your browser, visit `http://localhost:8080`
