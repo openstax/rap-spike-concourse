@@ -29,8 +29,10 @@ services:
       CONCOURSE_WORKER_BAGGAGECLAIM_DRIVER: overlay
 
   cnx-rabbitmq:
-    image: rabbitmq:latest
-    ports: ["5672:5672"]
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
 
   cnx-db:
     image: openstax/cnx-db:latest
