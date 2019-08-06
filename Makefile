@@ -4,7 +4,7 @@ default: help
 .PHONY: help
 help:
 	@echo "make help              Show this help message"
-	@echo 'make services          Run the services that Concourse and the pipeline requires"
+	@echo "make services          Run the services that Concourse and the pipeline requires"
 	@echo "make sql               Connect to the cnx-db database with a psql shell"
 
 .PHONY: services
