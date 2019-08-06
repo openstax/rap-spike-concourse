@@ -47,5 +47,16 @@ services:
       - DB_URL=postgresql://rhaptos@/repository
       - DB_SUPER_URL=postgresql://rhaptos_admin@/repository
 
+  content-events-api:
+    build: api/
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./api:/code
+    environment:
+      FLASK_ENV: development
+      FLASK_APP: app.py
+      FLASK_RUN_HOST: 0.0.0.0
+
 volumes:
   pg-data:
