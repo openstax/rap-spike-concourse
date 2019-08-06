@@ -1,7 +1,19 @@
 # rap-concourse-spike
 Exploring Concourse-CI’s (Continuous Integration) queue resource for use in the final product of Refactor Archive.
 
-## Creating the concourse spike development environment
+## Table of Contents
+
+* [Setup the development environment](#creating-the-concourse-spike-development-environment)
+  * [Requirements](#you-will-need)
+  * [Clone the Git repo](#clone-the-git-repo)
+  * [Run the services with Docker compose](#run-the-services-with-docker-compose)
+* [Access the services](#access-services)
+  * [RabbitMQ](#rabbitmq)
+  * [Concourse](#concourse)
+  * [PostgreSQL](#postgres)
+
+
+## Setup the development environment
 
 ### You will need
 
@@ -31,8 +43,7 @@ To stop any of the docker containers, obtain the CONTAINER ID by running `docker
 
     docker stop [CONTAINER ID]
 
-
-### Access Services
+## Access Services
 
 Access the services that have been started by Docker Compose.
 
@@ -41,7 +52,7 @@ Access the services that have been started by Docker Compose.
 - RabbitMQ Management (HTTP): http://guest:guest@localhost:15672
 - Postgres: postgres://rhaptos@localhost:15432/repository
 
-#### RabbitMQ 
+### RabbitMQ 
 
 Log into RabbitMQ with your browser, visit `http://localhost:15672`
 
@@ -52,7 +63,7 @@ username: guest
 password: guest
 ```
 
-#### Concourse 
+### Concourse 
 
 Log into Concourse with your browser, visit `http://localhost:8080`
 
@@ -72,4 +83,3 @@ Log in with psql shell to cnx-db
 [docker-ce]: https://docs.docker.com/install
 [docker-compose]: https://docs.docker.com/compose
 [docker-install]: https://docs.docker.com/compose/install
-
