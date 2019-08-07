@@ -17,35 +17,37 @@ def mock_content_event_api_response():
     return read_json_file(os.path.join(DATA_DIR, "content_events.json"))
 
 
-def make_input_stream(version):
-    def make_stream(json_obj):
-        stream = io.StringIO()
-        json.dump(json_obj, stream)
-        stream.seek(0)
-        return stream
+def make_stream(json_obj):
+    stream = io.StringIO()
+    json.dump(json_obj, stream)
+    stream.seek(0)
+    return stream
 
-    def make_input(version):
-        return {
-            "source": {
-                "api_root": "http://localhost:5000",
-                "status": "queued"
-            },
-            "version": version,
 
-        }
+def make_input(version, **kwargs):
+    payload = {"source": {
+        "api_root": "http://localhost:5000",
+    },
+        "version": version,
+    }
+    payload["source"].update(kwargs)
 
-    return make_stream(make_input(version))
+    return payload
+
+
+def make_input_stream(version, **kwargs):
+    return make_stream(make_input(version, **kwargs))
 
 
 class TestCheck(object):
 
     @mock.patch("src.check.get_content_events")
-    def test_edge_case(self, mock_fn):
+    def test_edge_case_queued_status(self, mock_fn):
         mock_fn.return_value = mock_content_event_api_response()
 
         version = None
 
-        in_stream = make_input_stream(version)
+        in_stream = make_input_stream(version, status="queued")
         result = check.check(in_stream)
 
         assert result == [
