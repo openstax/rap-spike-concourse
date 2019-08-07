@@ -51,9 +51,9 @@ On first run the DB needs to be recreated from the DB dump:
 
 This reinitializes the DB (drops, recreates DB and restores DB dump) with this three books:
 
-Elementary Algebra (col12116), id `0889907c-f0ef-496a-bcb8-2a5bb121717f`
-Intermediate Algebra (col12119), id `02776133-d49d-49cb-bfaa-67c7f61b25a1`
-Prealgebra (col11756), id `caa57dab-41c7-455e-bd6f-f443cda5519c`
+* Elementary Algebra (col12116), id `0889907c-f0ef-496a-bcb8-2a5bb121717f`
+* Intermediate Algebra (col12119), id `02776133-d49d-49cb-bfaa-67c7f61b25a1`
+* Prealgebra (col11756), id `caa57dab-41c7-455e-bd6f-f443cda5519c`
 
 ## Access Services
 
