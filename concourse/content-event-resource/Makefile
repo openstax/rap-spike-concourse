@@ -12,3 +12,6 @@ build:
 publish: build
 	docker push openstax/content-event-resource
 
+.PHONY: test
+test:
+	python -m pytest -vvv ./tests
