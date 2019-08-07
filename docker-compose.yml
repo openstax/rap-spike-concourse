@@ -39,6 +39,8 @@ services:
     # For development usage, use something like the following
     # build:
     #   context: https://github.com/Connexions/cnx-db.git#master
+    volumes:
+      - ${PWD}/20190805_dump.sql.gz:/docker-entrypoint-initdb.d/20190805_dump.sql.gz
     ports:
       - "15432:5432"
     environment:

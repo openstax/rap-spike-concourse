@@ -15,6 +15,7 @@ else
 	@echo Downloading db dump file first...
 	rsync -tv --progress -e 'ssh -T -c aes128-ctr -o Compression=no -x' backup1.cnx.org:/var/backups/db_dump/20190805_dump.sql.gz ./
 	docker-compose up -d
+	@echo Please wait ~2-3 minutes on first run because the DB dump will be restored now...
 endif
 
 

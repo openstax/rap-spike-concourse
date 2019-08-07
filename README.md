@@ -35,6 +35,8 @@ Start the services that are required with Docker Compose:
 
     make services
 
+Note: Wait ~2-3 minutes so that the DB dump can be restored.
+
 You'll now have four Docker containers running the PostgreSQL databases for cnx-db and Concourse, the Concourse application, and RabbitMQ. You should be able to see all the services by running:
 
     docker-compose ps
