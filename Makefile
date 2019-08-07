@@ -1,12 +1,15 @@
 .PHONY: default
 default: help
 
+include concourse/content-event-resource/Makefile
+
 .PHONY: help
 help:
 	@echo "make help              Show this help message"
 	@echo "make services          Run the services that Concourse and the pipeline requires"
 	@echo "make initdb            Restore DB dump on first run, can be also used to restore DB"
 	@echo "make sql               Connect to the cnx-db database with a psql shell"
+	@$(MAKE) help_submake --no-print-directory
 
 
 dump.sql.gz:
