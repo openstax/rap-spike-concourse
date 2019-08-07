@@ -1,9 +1,9 @@
-# rap-concourse-spike
+# rap-spike-concourse
 Exploring Concourse-CI’s (Continuous Integration) queue resource for use in the final product of Refactor Archive.
 
 ## Table of Contents
 
-* [Setup the development environment](#creating-the-concourse-spike-development-environment)
+* [Setup the development environment](#creating-the-spike-concourse-development-environment)
   * [Requirements](#you-will-need)
   * [Clone the Git repo](#clone-the-git-repo)
   * [Run the services with Docker compose](#run-the-services-with-docker-compose)
@@ -23,11 +23,11 @@ Exploring Concourse-CI’s (Continuous Integration) queue resource for use in th
 
 ### Clone the Git repo
 
-    git clone git@github.com:openstax/rap-concourse-spike.git
+    git clone git@github.com:openstax/rap-spike-concourse.git
 
-This will download the code into a `rap-concourse-spike` directory. You will need to be in  the `rap-concourse-spike` directory for the remainder of the installation process.
+This will download the code into a `rap-spike-concourse` directory. You will need to be in  the `rap-spike-concourse` directory for the remainder of the installation process.
 
-    cd rap-concourse-spike
+    cd rap-spike-concourse
 
 ### Run the services with Docker Compose
 
