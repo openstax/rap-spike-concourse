@@ -13,6 +13,7 @@ Exploring Concourse-CI’s (Continuous Integration) queue resource for use in th
   * [Concourse](#concourse)
   * [Content Event API](#content-event-api-via-flask)
   * [PostgreSQL](#postgres)
+* [Content event resource](#content-event-resource)
 
 
 ## Setup the development environment
@@ -109,6 +110,15 @@ $ curl localhost:5000/events/<id>
 Log in with psql shell to cnx-db
 
     make sql
+
+## Content event resource
+
+### Resource overview
+
+This resource checks the content event service for new events and triggers the 
+pipeline. 
+
+Access the [README.md](./concourse/content-event-resource/README.md) in the content event resource directory.
 
 [git]: https://git-scm.com
 [docker-ce]: https://docs.docker.com/install
