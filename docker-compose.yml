@@ -39,8 +39,13 @@ services:
     # For development usage, use something like the following
     # build:
     #   context: https://github.com/Connexions/cnx-db.git#master
+    volumes:
+      - pg-data:/var/lib/postgresql/data
     ports:
       - "15432:5432"
     environment:
       - DB_URL=postgresql://rhaptos@/repository
       - DB_SUPER_URL=postgresql://rhaptos_admin@/repository
+
+volumes:
+  pg-data:
