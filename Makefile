@@ -5,18 +5,27 @@ default: help
 help:
 	@echo "make help              Show this help message"
 	@echo "make services          Run the services that Concourse and the pipeline requires"
+	@echo "make initdb            Restore DB dump on first run, can be also used to restore DB"
 	@echo "make sql               Connect to the cnx-db database with a psql shell"
 
-.PHONY: services
-services:
-ifneq ("$(wildcard ./20190805_dump.sql.gz)","")
-	docker-compose up -d
-else
+
+dump.sql.gz:
 	@echo Downloading db dump file first...
-	rsync -tv --progress -e 'ssh -T -c aes128-ctr -o Compression=no -x' backup1.cnx.org:/var/backups/db_dump/20190805_dump.sql.gz ./
+	rsync -tv --progress -e 'ssh -T -c aes128-ctr -o Compression=no -x' backup1.cnx.org:/var/backups/db_dump/20190805_dump.sql.gz ./dump.sql.gz
+	@echo Please run "make initdb" to restore dump
+
+
+.PHONY: services
+services: dump.sql.gz
 	docker-compose up -d
-	@echo Please wait ~2-3 minutes on first run because the DB dump will be restored now...
-endif
+
+
+.PHONY: initdb
+initdb:
+	@echo drop and recreate db then restore dump
+	docker-compose exec -u postgres cnx-db dropdb -U postgres repository
+	docker-compose exec -u postgres cnx-db createdb -U postgres -O rhaptos repository
+	gunzip <dump.sql.gz | docker-compose exec -T -u postgres cnx-db psql -U postgres repository
 
 
 .PHONY: sql

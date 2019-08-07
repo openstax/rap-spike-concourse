@@ -35,8 +35,6 @@ Start the services that are required with Docker Compose:
 
     make services
 
-Note: Wait ~2-3 minutes so that the DB dump can be restored.
-
 You'll now have four Docker containers running the PostgreSQL databases for cnx-db and Concourse, the Concourse application, and RabbitMQ. You should be able to see all the services by running:
 
     docker-compose ps
@@ -44,6 +42,18 @@ You'll now have four Docker containers running the PostgreSQL databases for cnx-
 To stop any of the docker containers, obtain the CONTAINER ID by running `docker container ls`, then:
 
     docker stop [CONTAINER ID]
+
+### Initialize DB on first run
+
+On first run the DB needs to be recreated from the DB dump:
+
+    make initdb
+
+This reinitializes the DB (drops, recreates DB and restores DB dump) with this three books:
+
+Elementary Algebra (col12116), id `0889907c-f0ef-496a-bcb8-2a5bb121717f`
+Intermediate Algebra (col12119), id `02776133-d49d-49cb-bfaa-67c7f61b25a1`
+Prealgebra (col11756), id `caa57dab-41c7-455e-bd6f-f443cda5519c`
 
 ## Access Services
 
@@ -54,22 +64,22 @@ Access the services that have been started by Docker Compose.
 - RabbitMQ Management (HTTP): http://guest:guest@localhost:15672
 - Postgres: postgres://rhaptos@localhost:15432/repository
 
-### RabbitMQ 
+### RabbitMQ
 
 Log into RabbitMQ with your browser, visit `http://localhost:15672`
 
-Enter the following to login 
+Enter the following to login
 
 ```
 username: guest
 password: guest
 ```
 
-### Concourse 
+### Concourse
 
 Log into Concourse with your browser, visit `http://localhost:8080`
 
-Enter the following to login 
+Enter the following to login
 
 ```
 username: test
