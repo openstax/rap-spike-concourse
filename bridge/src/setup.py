@@ -39,16 +39,16 @@ SETUP_KWARGS = dict(
 # Note, this is not to be released to PyPI. It's for interal usage only
 
 setup(
-    name='extractor',
+    name='bridge',
     version='0.0.0',
     author='OpenStax',
     url="https://github.com/openstax",
     license='LGPL',
     entry_points="""\
     [console_scripts]
-    extractor--check = extractor.scripts.ci_resource_check:main
-    extractor--in = extractor.scripts.ci_resource_in:main
-    extractor--out = extractor.scripts.ci_resource_out:main
+    bridge--check = bridge.scripts.ci_resource_check:main
+    bridge--in = bridge.scripts.ci_resource_in:main
+    bridge--out = bridge.scripts.ci_resource_out:main
     """,
     **SETUP_KWARGS,
 )
