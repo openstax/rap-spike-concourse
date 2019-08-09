@@ -1,12 +1,5 @@
 FROM python:3
 
-# We could really use some kind of debian dockerfile instructions wrapper script Something like `capt install libxml2`.
-
-# - Install the system dependencies
-RUN apt-get update \
-    && apt-get install \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
 # - Move to the temporary workspace
 WORKDIR /tmp
 # - Copy the source code to an installable location
