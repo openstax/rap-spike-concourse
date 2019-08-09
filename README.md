@@ -133,21 +133,42 @@ Copy&Paste this access keys (key id & secret access key) into your password mana
 
 We will create a new remote location named `openstax` for accessing the Openstax sandbox buckets. If not already done [install rclone][rcloneinstall] (e.g. on Mac with `brew install rclone`).
 
-Configure rclone with and create a new remote (n):
+* Configure rclone with and create a new remote (n):
 
     rclone config
 
 ![rcloneconfig](https://i.imgur.com/jdUiGMP.png)
 
-Name it e.g. `openstax` and choose Amazon S3:
+* Name it e.g. `openstax` and choose Amazon S3:
 
 ![rclones3](https://i.imgur.com/DGGVWAw.png)
 
+* Choose S3
+* Enter AWS credentials in next step
+* Now enter your access key id and secret access key inside:
 
+![rclonesecret](https://i.imgur.com/24yuike.png)
 
+* Choose Ohio
+* Use default entpoint
+* Choose again Ohio / `us-east-2`
+* Choose FULL_CONTROL for owner (default):
 
+![rclonefullcontrol](https://i.imgur.com/hp7zL2k.png)
 
+* Choose no server side encryption
+* No KMS ID:
 
+![rclonekms](https://i.imgur.com/pquRRqW.png)
+
+* Default storage class
+* No advanced config
+
+* At the end confirm all your settings which should look similar to this:
+
+![rcloneconfirm](https://i.imgur.com/7lCCxHB.png)
+
+* quit config
 
 
 [git]: https://git-scm.com
