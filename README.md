@@ -3,7 +3,7 @@ Exploring Concourse-CI’s (Continuous Integration) queue resource for use in th
 
 ## Table of Contents
 
-* [Setup the development environment](#creating-the-spike-concourse-development-environment)
+* [Setup the development environment](#setup-the-development-environment)
   * [Requirements](#you-will-need)
   * [Clone the Git repo](#clone-the-git-repo)
   * [Run the services with Docker compose](#run-the-services-with-docker-compose)
@@ -11,6 +11,7 @@ Exploring Concourse-CI’s (Continuous Integration) queue resource for use in th
   * [RabbitMQ](#rabbitmq)
   * [Concourse](#concourse)
   * [PostgreSQL](#postgres)
+* [S3 access for local development](#s3-access-for-local-development)
 
 
 ## Setup the development environment
@@ -107,6 +108,8 @@ $ curl localhost:5000/events/<id>
 Log in with psql shell to cnx-db
 
     make sql
+
+### S3 access for local development
 
 [git]: https://git-scm.com
 [docker-ce]: https://docs.docker.com/install
