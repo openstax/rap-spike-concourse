@@ -43,9 +43,6 @@ services:
       - pg-data:/var/lib/postgresql/data
     ports:
       - "15432:5432"
-    environment:
-      - DB_URL=postgresql://rhaptos@/repository
-      - DB_SUPER_URL=postgresql://rhaptos_admin@/repository
 
   content-events-api:
     build: api/
