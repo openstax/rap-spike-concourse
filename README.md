@@ -7,7 +7,7 @@ Exploring Concourse-CI’s (Continuous Integration) queue resource for use in th
   * [Requirements](#you-will-need)
   * [Clone the Git repo](#clone-the-git-repo)
   * [Run the services with Docker compose](#run-the-services-with-docker-compose)
-  * [Initialize DB on first run](initialize-db-on-first-run)
+  * [Initialize DB on first run](#initialize-db-on-first-run)
 * [Access the services](#access-services)
   * [RabbitMQ](#rabbitmq)
   * [Concourse](#concourse)
