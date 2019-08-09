@@ -12,6 +12,12 @@ Exploring Concourse-CI’s (Continuous Integration) queue resource for use in th
   * [Concourse](#concourse)
   * [PostgreSQL](#postgres)
 * [S3 access for debugging](#s3-access-for-debugging)
+  * [Get your S3 credentials](#get-your-s3-credentials)
+  * [Setting up rclone](#setting-up-rclone)
+  * [Test that rclone works](#test-that-rclone-works)
+  * [How to use rclone](#how-to-use-rclone)
+  * [How to mount a bucket into your local filesystem with FUSE](#how-to-mount-a-bucket-into-your-local-filesystem-with-fuse)
+  * [Mac and Cyberduck](#mac-and-cyberduck)
 
 
 ## Setup the development environment
@@ -115,7 +121,7 @@ You need opensource software [rclone][rclone] for this guide. rclone enables acc
 
 Please install it using [this guide][rcloneinstall].
 
-#### Get your S3 credentials for accessing buckets
+#### Get your S3 credentials
 
 Login to your [aws console][awsconsole] with your credentials.
 
@@ -135,7 +141,9 @@ We will create a new remote location named `openstax` for accessing the Openstax
 
 * Configure rclone with and create a new remote (n):
 
-    rclone config
+```
+rclone config
+```
 
 ![rcloneconfig](https://i.imgur.com/jdUiGMP.png)
 
@@ -174,16 +182,74 @@ We will create a new remote location named `openstax` for accessing the Openstax
 
 Run following command to remote `openstax` look at the buckets available:
 
-    rclone lsd openstax:
+```
+rclone lsd openstax:
+```
 
 You should see a list of buckets and also our test bucket `ce-rap-test`:
 
 ![ce-rap-test](https://i.imgur.com/9AALpsA.png)
 
-#### How to use rclone, some examples
+#### How to use rclone
 
-If you want to list the contents
+Some examples of rclone usage.
 
+List the contents of bucket `ce-rap-test`:
+
+```
+rclone ls openstax:ce-rap-test
+```
+
+Copy all content from `ce-rap-test` to your current directory:
+
+```
+rclone copy openstax:ce-rap-test ./
+```
+
+Copy one file into the bucket:
+
+```
+rclone copy ./nothinginside.md openstax:ce-rap-test/
+```
+
+Information: Be careful with `move` and `delete` commands!
+
+#### How to mount a bucket into your local filesystem with FUSE
+
+rclone can also mount buckets into your local filesystem with FUSE.
+
+Info: On mac you need to install [FUSE for macOS][macosfuse] once.
+
+First create a local folder e.g. in your home dir where you want to mount the bucket. For example:
+
+```
+mkdir ~/s3files
+```
+
+Now mount the bucket with rclone:
+
+```
+rclone mount openstax:ce-rap-test ~/s3files
+```
+
+**Now you can use that folder as remote mount and can copy/move/delete files into s3 and out!**
+
+To stop mounting press `Ctrl-C`. Sometimes unmounting can fail. In this case use this command to unmount your mount folder manually:
+
+```bash
+# Linux
+fusermount -u /s3files
+# OS X
+umount /s3files
+```
+
+#### Mac and Cyberduck
+
+On macOS there is a very easy to use UI interface for accessing S3 buckets and also user rights in S3.
+
+It's free and easy to use: [CyberDuck][cyberduck]
+
+I don't write a specific guide for Cyberduck because it is self explanatory and works quite similar to FTP programs.
 
 [git]: https://git-scm.com
 [docker-ce]: https://docs.docker.com/install
@@ -192,3 +258,5 @@ If you want to list the contents
 [rclone]: https://rclone.org
 [rcloneinstall]: https://rclone.org/install/
 [awsconsole]: https://openstax-dev-sandbox.signin.aws.amazon.com/console
+[macosfuse]: https://osxfuse.github.io/
+[cyberduck]: https://cyberduck.io/
