@@ -11,7 +11,7 @@ Exploring Concourse-CI’s (Continuous Integration) queue resource for use in th
   * [RabbitMQ](#rabbitmq)
   * [Concourse](#concourse)
   * [PostgreSQL](#postgres)
-* [S3 access for local development](#s3-access-for-local-development)
+* [S3 access for debugging](#s3-access-for-debugging)
 
 
 ## Setup the development environment
@@ -109,9 +109,16 @@ Log in with psql shell to cnx-db
 
     make sql
 
-### S3 access for local development
+### S3 access for debugging
+
+You need opensource software [rclone][rclone] for this guide.
+
+Please install it using [this guide][rcloneinstall].
+
 
 [git]: https://git-scm.com
 [docker-ce]: https://docs.docker.com/install
 [docker-compose]: https://docs.docker.com/compose
 [docker-install]: https://docs.docker.com/compose/install
+[rclone]: https://rclone.org
+[rcloneinstall]: https://rclone.org/install/
