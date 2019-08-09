@@ -39,9 +39,9 @@ You'll now have four Docker containers running the PostgreSQL databases for cnx-
 
     docker-compose ps
 
-To stop any of the docker containers, obtain the CONTAINER ID by running `docker container ls`, then:
+To stop any of the docker containers:
 
-    docker stop [CONTAINER ID]
+    docker-compose stop [SERVICE...]  # e.g. docker-compose stop cnx-db
 
 ### Initialize DB on first run
 
