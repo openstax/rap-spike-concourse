@@ -17,7 +17,7 @@ dump.sql.gz:
 .PHONY: services
 services:
 	docker-compose up -d
-	@echo Info: To (re-)init DB run "make initdb" now.
+	@echo Info: To \(re-\)init DB run "make initdb" now.
 
 
 .PHONY: initdb
