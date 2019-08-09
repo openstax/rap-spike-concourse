@@ -7,9 +7,11 @@ Exploring Concourse-CI’s (Continuous Integration) queue resource for use in th
   * [Requirements](#you-will-need)
   * [Clone the Git repo](#clone-the-git-repo)
   * [Run the services with Docker compose](#run-the-services-with-docker-compose)
+  * [Initialize DB on first run](initialize-db-on-first-run)
 * [Access the services](#access-services)
   * [RabbitMQ](#rabbitmq)
   * [Concourse](#concourse)
+  * [Content Event API](#content-event-api-via-flask)
   * [PostgreSQL](#postgres)
 
 
@@ -86,7 +88,7 @@ username: test
 password: test
 ```
 
-#### Content Event API via FLASK
+### Content Event API via FLASK
 
 1. See events:
 ```
@@ -103,7 +105,7 @@ $ curl -d '{"ident_hash": "0889907c-f0ef-496a-bcb8-2a5bb121717f"}' -H "Content-T
 $ curl localhost:5000/events/<id>
 ```
 
-#### Postgres
+### Postgres
 Log in with psql shell to cnx-db
 
     make sql
