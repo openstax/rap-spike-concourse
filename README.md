@@ -149,9 +149,9 @@ We will create a new remote location named `openstax` for accessing the Openstax
 
 ![rclonesecret](https://i.imgur.com/24yuike.png)
 
-* Choose Ohio
+* Choose Ohio: `us-east-2`
 * Use default entpoint
-* Choose again Ohio / `us-east-2`
+* Choose again Ohio: `us-east-2`
 * Choose FULL_CONTROL for owner (default):
 
 ![rclonefullcontrol](https://i.imgur.com/hp7zL2k.png)
@@ -169,6 +169,20 @@ We will create a new remote location named `openstax` for accessing the Openstax
 ![rcloneconfirm](https://i.imgur.com/7lCCxHB.png)
 
 * quit config
+
+#### Test that rclone works
+
+Run following command to remote `openstax` look at the buckets available:
+
+    rclone lsd openstax:
+
+You should see a list of buckets and also our test bucket `ce-rap-test`:
+
+![ce-rap-test](https://i.imgur.com/9AALpsA.png)
+
+#### How to use rclone, some examples
+
+If you want to list the contents
 
 
 [git]: https://git-scm.com
