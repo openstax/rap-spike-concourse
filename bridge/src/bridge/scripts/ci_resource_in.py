@@ -1,8 +1,10 @@
+import json
 import sys
 
 import psycopg2
 
 from ..concourse import concourse_method
+from ..utils import get_resources
 
 
 @concourse_method(required_source=('db',), required_params=('ident_hash',))
@@ -20,6 +22,12 @@ def main(input_, environ):
             b = cursor.fetchone()[0]
             if not b:
                 raise RuntimeError("didn't work")
+
+            for content, sha1, metadata in get_resources(cursor, ident_hash):
+                with open(sha1, 'wb') as f:
+                    f.write(content[:])
+                with open('{}.metadata.json'.format(sha1), 'w') as f:
+                    json.dump(metadata, f)
 
     output = {'version': ident_hash}
     return output
