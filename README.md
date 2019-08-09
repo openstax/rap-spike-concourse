@@ -111,9 +111,43 @@ Log in with psql shell to cnx-db
 
 ### S3 access for debugging
 
-You need opensource software [rclone][rclone] for this guide.
+You need opensource software [rclone][rclone] for this guide. rclone enables accessing various cloud storage providers in a way similar to rsync. It also let's you mount s3 with FUSE.
 
 Please install it using [this guide][rcloneinstall].
+
+#### Get your S3 credentials for accessing buckets
+
+Login to your [aws console][awsconsole] with your credentials.
+
+Go to upper right corner to "My Security Credentials"
+
+![securitycredentials](https://i.imgur.com/ltnzm71.png)
+
+Now create access keys
+
+![accesskeys](https://i.imgur.com/zXe2dlA.png)
+
+Copy&Paste this access keys (key id & secret access key) into your password manager or download them. You will need them later.
+
+#### Setting up rclone
+
+We will create a new remote location named `openstax` for accessing the Openstax sandbox buckets. If not already done [install rclone][rcloneinstall] (e.g. on Mac with `brew install rclone`).
+
+Configure rclone with and create a new remote (n):
+
+    rclone config
+
+![rcloneconfig](https://i.imgur.com/jdUiGMP.png)
+
+Name it e.g. `openstax` and choose Amazon S3:
+
+![rclones3](https://i.imgur.com/DGGVWAw.png)
+
+
+
+
+
+
 
 
 [git]: https://git-scm.com
@@ -122,3 +156,4 @@ Please install it using [this guide][rcloneinstall].
 [docker-install]: https://docs.docker.com/compose/install
 [rclone]: https://rclone.org
 [rcloneinstall]: https://rclone.org/install/
+[awsconsole]: https://openstax-dev-sandbox.signin.aws.amazon.com/console
