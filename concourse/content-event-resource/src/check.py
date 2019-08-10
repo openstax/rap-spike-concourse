@@ -1,7 +1,8 @@
 import json
 import sys
 
-from src.events import get_content_events
+from src.event_api import get_events
+from src.utils import msg
 
 
 def check(in_stream):
@@ -9,7 +10,8 @@ def check(in_stream):
     api_root = input["source"]["api_root"]
     status = input["source"]["status"]
 
-    events = get_content_events(api_root)
+    events = get_events(api_root)
+    msg("{}", events)
 
     events = [event for event in events if event["status"] == status]
 
@@ -17,7 +19,7 @@ def check(in_stream):
         previous_id = input["version"]["id"]
         events = [event for event in events if event["id"] > previous_id]
 
-    return events
+    return [{"id": event["id"]} for event in events]
 
 
 def main():
