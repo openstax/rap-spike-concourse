@@ -174,7 +174,7 @@ rclone config
 
 * At the end confirm all your settings which should look similar to this:
 
-![rcloneconfirm](https://i.imgur.com/7lCCxHB.png)
+![rcloneconfirm](https://i.imgur.com/O128Y4l.png)
 
 * quit config
 
@@ -245,7 +245,7 @@ umount /s3files
 
 #### Mac and Cyberduck
 
-On macOS there is a very easy to use UI interface for accessing S3 buckets and also user rights in S3.
+On macOS there is a very easy to use UI interface for accessing S3 buckets and also for managing user rights in S3 buckets.
 
 It's free and easy to use: [CyberDuck][cyberduck]
 
