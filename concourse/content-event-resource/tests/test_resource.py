@@ -41,8 +41,8 @@ def make_input_stream(version, **kwargs):
 
 class TestCheck(object):
 
-    @mock.patch("src.check.get_content_events")
-    def test_edge_case_queued_status(self, mock_fn):
+    @mock.patch("src.check.get_events")
+    def test_edge_case_queued_events(self, mock_fn):
         mock_fn.return_value = mock_content_event_api_response()
 
         version = None
@@ -51,5 +51,16 @@ class TestCheck(object):
         result = check.check(in_stream)
 
         assert result == [
-            {"id": 1, "ident_hash": "0889907c-f0ef-496a-bcb8-2a5bb121717f", "status": "queued"},
-            {"id": 2, "ident_hash": "02776133-d49d-49cb-bfaa-67c7f61b25a1", "status": "queued"}]
+            {"id": 1},
+            {"id": 2}]
+
+    @mock.patch("src.check.get_events")
+    def test_edge_case_queued_no_events(self, mock_fn):
+        mock_fn.return_value = []
+
+        version = None
+
+        in_stream = make_input_stream(version, status="queued")
+        result = check.check(in_stream)
+
+        assert result == []
