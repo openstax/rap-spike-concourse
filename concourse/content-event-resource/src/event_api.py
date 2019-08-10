@@ -12,4 +12,4 @@ def get_content_events(api_root):
     url = build_url(api_root, "events")
     response = requests.get(url)
     response.raise_for_status()
-    return response.json()
+    return response.json()["events"]
