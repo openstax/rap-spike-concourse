@@ -13,7 +13,12 @@ Exploring Concourse-CI’s (Continuous Integration) queue resource for use in th
   * [Concourse](#concourse)
   * [Content Event API](#content-event-api-via-flask)
   * [PostgreSQL](#postgres)
-* [Content event resource](#content-event-resource)
+* [Concourse](#concourse)
+  * [`fly` commands](#fly-commands)
+    * [Create a target](#create-a-target)
+    * [Add a pipeline](#add-a-pipeline)
+  * [Pipelines](#pipelines)
+  * [Content event resource](#content-event-resource)
 
 
 ## Setup the development environment
@@ -111,14 +116,35 @@ Log in with psql shell to cnx-db
 
     make sql
 
-## Content event resource
+## Concourse
 
-### Resource overview
+### `fly` commands
 
-This resource checks the content event service for new events and triggers the 
-pipeline. 
+In order to use of pipelines you must first create a target for your Concourse instance.
+
+#### Create a target
+
+    fly --target dev login --concourse-url http://0.0.0.0:8080 -u test -p test
+
+You will need to unpause a newly created pipeline. The output for the command
+will provide you with options.
+
+#### Add a pipeline
+
+    fly -t dev set-pipeline -p publish-pipeline -c concourse/show-queued-pipeline.yml
+
+To update a pipeline you can use the same command to add a pipeline. You will be
+shown a diff of the server held pipeline and your changes.
+
+### Pipelines
+
+Pipelines for this repository are contained in the [concourse](./concourse) folder.
+
+### Content event resource
 
 Access the [README.md](./concourse/content-event-resource/README.md) in the content event resource directory.
+
+If you are doing development for the resource it's helpful to change into the directory.
 
 [git]: https://git-scm.com
 [docker-ce]: https://docs.docker.com/install
