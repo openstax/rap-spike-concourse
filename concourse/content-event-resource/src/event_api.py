@@ -8,8 +8,15 @@ def build_url(api_root, *args):
     return "/".join(parts)
 
 
-def get_content_events(api_root):
+def get_events(api_root):
     url = build_url(api_root, "events")
     response = requests.get(url)
     response.raise_for_status()
     return response.json()["events"]
+
+
+def get_event(api_root, event_id):
+    url = build_url(api_root, "events", event_id)
+    response = requests.get(url)
+    response.raise_for_status()
+    return response.json()
