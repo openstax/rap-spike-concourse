@@ -103,7 +103,7 @@ curl localhost:5000/events
 
 2. Add event:
 ```
-$ curl -d '{"ident_hash": "0889907c-f0ef-496a-bcb8-2a5bb121717f"}' -H "Content-Type: application/json" -X POST http://localhost:5000/events
+curl -d '{"ident_hash": "0889907c-f0ef-496a-bcb8-2a5bb121717f", "status": "queued"}' -H "Content-Type: application/json" -X POST http://localhost:5000/events
 ```
 
 3. See event:
