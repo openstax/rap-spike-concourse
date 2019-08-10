@@ -16,12 +16,20 @@ Install dependencies:
 
 ### Run unit tests
 
-`python -m pytest -vvv tests/`
+`make test`
 
-### Build the docker image
+### Build the docker image for development
 
-`make build`
+`make build-image`
 
-### Publish the image to dockerhub
+### Build the docker image tagged latest
 
-`make publish`
+`make tag-latest`
+
+### Release the versioned image to dockerhub
+
+`make release`
+
+### Release the latest image to dockerhub
+
+`make release-latest`
