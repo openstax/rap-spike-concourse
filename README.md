@@ -121,6 +121,11 @@ You need opensource software [rclone][rclone] for this guide. rclone enables acc
 
 Please install it using [this guide][rcloneinstall].
 
+Info for Mac users:
+
+* Install [FUSE for macOS][macosfuse] first.
+* You can install rclone easily with `brew install rclone`.
+
 #### Get your S3 credentials
 
 Login to your [aws console][awsconsole] with your credentials.
@@ -218,7 +223,7 @@ Information: Be careful with `move` and `delete` commands!
 
 rclone can also mount buckets into your local filesystem with FUSE.
 
-Info: On mac you need to install [FUSE for macOS][macosfuse] once.
+Info: On mac you need to install [FUSE for macOS][macosfuse] first.
 
 First create a local folder e.g. in your home dir where you want to mount the bucket. For example:
 
