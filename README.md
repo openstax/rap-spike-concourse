@@ -13,6 +13,12 @@ Exploring Concourse-CI’s (Continuous Integration) queue resource for use in th
   * [Concourse](#concourse)
   * [Content Event API](#content-event-api-via-flask)
   * [PostgreSQL](#postgres)
+* [Concourse](#concourse)
+  * [`fly` commands](#fly-commands)
+    * [Create a target](#create-a-target)
+    * [Add a pipeline](#add-a-pipeline)
+  * [Pipelines](#pipelines)
+  * [Content event resource](#content-event-resource)
 
 
 ## Setup the development environment
@@ -97,7 +103,7 @@ curl localhost:5000/events
 
 2. Add event:
 ```
-$ curl -d '{"ident_hash": "0889907c-f0ef-496a-bcb8-2a5bb121717f"}' -H "Content-Type: application/json" -X POST http://localhost:5000/events
+curl -d '{"ident_hash": "0889907c-f0ef-496a-bcb8-2a5bb121717f", "status": "queued"}' -H "Content-Type: application/json" -X POST http://localhost:5000/events
 ```
 
 3. See event:
@@ -109,6 +115,36 @@ $ curl localhost:5000/events/<id>
 Log in with psql shell to cnx-db
 
     make sql
+
+## Concourse
+
+### `fly` commands
+
+In order to use of pipelines you must first create a target for your Concourse instance.
+
+#### Create a target
+
+    fly --target dev login --concourse-url http://0.0.0.0:8080 -u test -p test
+
+You will need to unpause a newly created pipeline. The output for the command
+will provide you with options.
+
+#### Add a pipeline
+
+    fly -t dev set-pipeline -p publish-pipeline -c concourse/show-queued-pipeline.yml
+
+To update a pipeline you can use the same command to add a pipeline. You will be
+shown a diff of the server held pipeline and your changes.
+
+### Pipelines
+
+Pipelines for this repository are contained in the [concourse](./concourse) folder.
+
+### Content event resource
+
+Access the [README.md](./concourse/content-event-resource/README.md) in the content event resource directory.
+
+If you are doing development for the resource it's helpful to change into the directory.
 
 [git]: https://git-scm.com
 [docker-ce]: https://docs.docker.com/install
