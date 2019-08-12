@@ -20,6 +20,7 @@ jobs:
     plan:
       - get: content-events-queued
         trigger: true
+        version: every
       - task: show-queued
         config:
           platform: linux
