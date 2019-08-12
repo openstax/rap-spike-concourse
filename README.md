@@ -132,11 +132,11 @@ Login to your [aws console][awsconsole] with your credentials.
 
 Go to upper right corner to "My Security Credentials"
 
-![securitycredentials](https://i.imgur.com/ltnzm71.png)
+![securitycredentials](https://user-images.githubusercontent.com/1050582/62883460-c27a6780-bd3c-11e9-9982-7469b6f8408c.jpg)
 
 Now create access keys
 
-![accesskeys](https://i.imgur.com/zXe2dlA.png)
+![accesskeys](https://user-images.githubusercontent.com/1050582/62883461-c27a6780-bd3c-11e9-8770-68650ddba263.jpg)
 
 Copy&Paste this access keys (key id & secret access key) into your password manager or download them. You will need them later.
 
@@ -150,36 +150,36 @@ We will create a new remote location named `openstax` for accessing the Openstax
 rclone config
 ```
 
-![rcloneconfig](https://i.imgur.com/jdUiGMP.png)
+![rcloneconfig](https://user-images.githubusercontent.com/1050582/62883463-c27a6780-bd3c-11e9-83f3-21bc0a037cbd.jpg)
 
 * Name it e.g. `openstax` and choose Amazon S3:
 
-![rclones3](https://i.imgur.com/DGGVWAw.png)
+![rclones3](https://user-images.githubusercontent.com/1050582/62883464-c312fe00-bd3c-11e9-9d90-404bde984996.jpg)
 
 * Choose S3
 * Enter AWS credentials in next step
 * Now enter your access key id and secret access key inside:
 
-![rclonesecret](https://i.imgur.com/24yuike.png)
+![rclonesecret](https://user-images.githubusercontent.com/1050582/62883465-c312fe00-bd3c-11e9-94aa-eaba436bd5b7.jpg)
 
 * Choose Ohio: `us-east-2`
 * Use default entpoint
 * Choose again Ohio: `us-east-2`
 * Choose FULL_CONTROL for owner (default):
 
-![rclonefullcontrol](https://i.imgur.com/hp7zL2k.png)
+![rclonefullcontrol](https://user-images.githubusercontent.com/1050582/62883466-c312fe00-bd3c-11e9-8c12-b7ee4c68c7fd.jpg)
 
 * Choose no server side encryption
 * No KMS ID:
 
-![rclonekms](https://i.imgur.com/pquRRqW.png)
+![rclonekms](https://user-images.githubusercontent.com/1050582/62883467-c312fe00-bd3c-11e9-97f7-6c0947e16aa6.jpg)
 
 * Default storage class
 * No advanced config
 
 * At the end confirm all your settings which should look similar to this:
 
-![rcloneconfirm](https://i.imgur.com/O128Y4l.png)
+![rcloneconfirm](https://user-images.githubusercontent.com/1050582/62883469-c3ab9480-bd3c-11e9-819c-59c2d222adea.jpg)
 
 * quit config
 
@@ -193,7 +193,7 @@ rclone lsd openstax:
 
 You should see a list of buckets and also our test bucket `ce-rap-test`:
 
-![ce-rap-test](https://i.imgur.com/9AALpsA.png)
+![ce-rap-test](https://user-images.githubusercontent.com/1050582/62883470-c3ab9480-bd3c-11e9-9c7a-c77b171a0185.jpg)
 
 #### How to use rclone
 
