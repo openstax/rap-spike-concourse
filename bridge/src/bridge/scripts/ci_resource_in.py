@@ -1,6 +1,7 @@
 import json
 import sys
 from pathlib import Path
+from datetime import datetime
 
 import psycopg2
 
@@ -44,5 +45,11 @@ def main(input_, environ, args):
                         'w') as f:
                     json.dump(metadata, f)
 
-    output = {'version': ident_hash}
+    version = {'timestamp': str(datetime.now().timestamp())}
+    output = {
+        'version': version,
+        'metadata': [
+            {'name': 'ident_hash', 'value': ident_hash},
+        ]
+    }
     return output
