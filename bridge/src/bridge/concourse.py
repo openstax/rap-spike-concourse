@@ -32,6 +32,7 @@ def concourse_method(required_source=None, required_params=None):
     def decorator(func):
         @wraps(func)
         def wrapper():
+            args = sys.argv[1:]
             env = get_environ()
             try:
                 input_ = json.load(sys.stdin)
@@ -40,7 +41,7 @@ def concourse_method(required_source=None, required_params=None):
                 sys.exit(1)
             # TODO verify required values specified by
             #      `required_source` & `required_params`
-            print(json.dumps(func(input_, env)))
+            print(json.dumps(func(input_, env, args)))
             return 0
         return wrapper
     return decorator
