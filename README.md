@@ -231,7 +231,7 @@ First create a local folder e.g. in your home dir where you want to mount the bu
 mkdir ~/s3files
 ```
 
-Now mount the bucket with rclone:
+Now mount the bucket with rclone in the foreground:
 
 ```
 rclone mount openstax:ce-rap-test ~/s3files
@@ -246,6 +246,11 @@ To stop mounting press `Ctrl-C`. Sometimes unmounting can fail. In this case use
 fusermount -u /s3files
 # OS X
 umount /s3files
+```
+
+If you want o mount the bucket in the background you just need to add a `&` in the command:
+```
+rclone mount openstax:ce-rap-test ~/s3files &
 ```
 
 #### Mac and Cyberduck
