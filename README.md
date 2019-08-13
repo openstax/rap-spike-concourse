@@ -3,7 +3,7 @@ Exploring Concourse-CI’s (Continuous Integration) queue resource for use in th
 
 ## Table of Contents
 
-* [Setup the development environment](#creating-the-spike-concourse-development-environment)
+* [Setup the development environment](#setup-the-development-environment)
   * [Requirements](#you-will-need)
   * [Clone the Git repo](#clone-the-git-repo)
   * [Run the services with Docker compose](#run-the-services-with-docker-compose)
@@ -13,6 +13,13 @@ Exploring Concourse-CI’s (Continuous Integration) queue resource for use in th
   * [Concourse](#concourse)
   * [Content Event API](#content-event-api-via-flask)
   * [PostgreSQL](#postgres)
+* [S3 access for debugging](#s3-access-for-debugging)
+  * [Get your S3 credentials](#get-your-s3-credentials)
+  * [Setting up rclone](#setting-up-rclone)
+  * [Test that rclone works](#test-that-rclone-works)
+  * [How to use rclone](#how-to-use-rclone)
+  * [How to mount a bucket into your local filesystem with FUSE](#how-to-mount-a-bucket-into-your-local-filesystem-with-fuse)
+  * [Mac and Cyberduck](#mac-and-cyberduck)
 * [Concourse](#concourse)
   * [`fly` commands](#fly-commands)
     * [Create a target](#create-a-target)
@@ -116,6 +123,152 @@ Log in with psql shell to cnx-db
 
     make sql
 
+### S3 access for debugging
+
+You need opensource software [rclone][rclone] for this guide. rclone enables accessing various cloud storage providers in a way similar to rsync. It also let's you mount s3 with FUSE.
+
+Please install it using [this guide][rcloneinstall].
+
+Info for Mac users:
+
+* Install [FUSE for macOS][macosfuse] first.
+* You can install rclone easily with `brew install rclone`.
+
+#### Get your S3 credentials
+
+Login to your [aws console][awsconsole] with your credentials.
+
+Go to upper right corner to "My Security Credentials"
+
+![securitycredentials](https://user-images.githubusercontent.com/1050582/62883460-c27a6780-bd3c-11e9-9982-7469b6f8408c.jpg)
+
+Now create access keys
+
+![accesskeys](https://user-images.githubusercontent.com/1050582/62883461-c27a6780-bd3c-11e9-8770-68650ddba263.jpg)
+
+Copy&Paste this access keys (key id & secret access key) into your password manager or download them. You will need them later.
+
+#### Setting up rclone
+
+We will create a new remote location named `openstax` for accessing the Openstax sandbox buckets. If not already done [install rclone][rcloneinstall] (e.g. on Mac with `brew install rclone`).
+
+* Configure rclone with and create a new remote (n):
+
+```
+rclone config
+```
+
+![rcloneconfig](https://user-images.githubusercontent.com/1050582/62883463-c27a6780-bd3c-11e9-83f3-21bc0a037cbd.jpg)
+
+* Name it e.g. `openstax` and choose Amazon S3:
+
+![rclones3](https://user-images.githubusercontent.com/1050582/62883464-c312fe00-bd3c-11e9-9d90-404bde984996.jpg)
+
+* Choose S3
+* Enter AWS credentials in next step
+* Now enter your access key id and secret access key inside:
+
+![rclonesecret](https://user-images.githubusercontent.com/1050582/62883465-c312fe00-bd3c-11e9-94aa-eaba436bd5b7.jpg)
+
+* Choose Ohio: `us-east-2`
+* Use default entpoint
+* Choose again Ohio: `us-east-2`
+* Choose FULL_CONTROL for owner (default):
+
+![rclonefullcontrol](https://user-images.githubusercontent.com/1050582/62883466-c312fe00-bd3c-11e9-8c12-b7ee4c68c7fd.jpg)
+
+* Choose no server side encryption
+* No KMS ID:
+
+![rclonekms](https://user-images.githubusercontent.com/1050582/62883467-c312fe00-bd3c-11e9-97f7-6c0947e16aa6.jpg)
+
+* Default storage class
+* No advanced config
+
+* At the end confirm all your settings which should look similar to this:
+
+![rcloneconfirm](https://user-images.githubusercontent.com/1050582/62883469-c3ab9480-bd3c-11e9-819c-59c2d222adea.jpg)
+
+* quit config
+
+#### Test that rclone works
+
+Run following command to remote `openstax` look at the buckets available:
+
+```
+rclone lsd openstax:
+```
+
+You should see a list of buckets and also our test bucket `ce-rap-test`:
+
+![ce-rap-test](https://user-images.githubusercontent.com/1050582/62883470-c3ab9480-bd3c-11e9-9c7a-c77b171a0185.jpg)
+
+#### How to use rclone
+
+Some examples of rclone usage.
+
+List the contents of bucket `ce-rap-test`:
+
+```
+rclone ls openstax:ce-rap-test
+```
+
+Copy all content from `ce-rap-test` to your current directory:
+
+```
+rclone copy openstax:ce-rap-test ./
+```
+
+Copy one file into the bucket:
+
+```
+rclone copy ./nothinginside.md openstax:ce-rap-test/
+```
+
+Information: Be careful with `move` and `delete` commands!
+
+#### How to mount a bucket into your local filesystem with FUSE
+
+rclone can also mount buckets into your local filesystem with FUSE.
+
+Info: On mac you need to install [FUSE for macOS][macosfuse] first.
+
+First create a local folder e.g. in your home dir where you want to mount the bucket. For example:
+
+```
+mkdir ~/s3files
+```
+
+Now mount the bucket with rclone in the foreground:
+
+```
+rclone mount openstax:ce-rap-test ~/s3files
+```
+
+or if you want to mount the bucket in the background you just need to add a `&` in the command:
+```
+rclone mount openstax:ce-rap-test ~/s3files &
+```
+
+**Now you can use that folder as remote mount and can copy/move/delete files into s3 and out!**
+
+To stop mounting from foreground mount press `Ctrl-C`. Sometimes unmounting can fail. In this case use this command to unmount your mount folder manually:
+
+```bash
+# Linux
+fusermount -u /s3files
+# OS X
+umount /s3files
+```
+
+#### Mac and Cyberduck
+
+On macOS there is a very easy to use UI interface for accessing S3 buckets and also for managing user rights in S3 buckets.
+
+It's free and easy to use: [CyberDuck][cyberduck]
+
+I don't write a specific guide for Cyberduck because it is self explanatory and works quite similar to FTP programs.
+
 ## Concourse
 
 ### `fly` commands
@@ -150,3 +303,8 @@ If you are doing development for the resource it's helpful to change into the di
 [docker-ce]: https://docs.docker.com/install
 [docker-compose]: https://docs.docker.com/compose
 [docker-install]: https://docs.docker.com/compose/install
+[rclone]: https://rclone.org
+[rcloneinstall]: https://rclone.org/install/
+[awsconsole]: https://openstax-dev-sandbox.signin.aws.amazon.com/console
+[macosfuse]: https://osxfuse.github.io/
+[cyberduck]: https://cyberduck.io/
