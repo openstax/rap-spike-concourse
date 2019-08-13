@@ -237,20 +237,20 @@ Now mount the bucket with rclone in the foreground:
 rclone mount openstax:ce-rap-test ~/s3files
 ```
 
+or if you want to mount the bucket in the background you just need to add a `&` in the command:
+```
+rclone mount openstax:ce-rap-test ~/s3files &
+```
+
 **Now you can use that folder as remote mount and can copy/move/delete files into s3 and out!**
 
-To stop mounting press `Ctrl-C`. Sometimes unmounting can fail. In this case use this command to unmount your mount folder manually:
+To stop mounting from foreground mount press `Ctrl-C`. Sometimes unmounting can fail. In this case use this command to unmount your mount folder manually:
 
 ```bash
 # Linux
 fusermount -u /s3files
 # OS X
 umount /s3files
-```
-
-If you want o mount the bucket in the background you just need to add a `&` in the command:
-```
-rclone mount openstax:ce-rap-test ~/s3files &
 ```
 
 #### Mac and Cyberduck
