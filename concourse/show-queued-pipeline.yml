@@ -1,0 +1,35 @@
+---
+resource_types:
+
+  - name: content-events
+    type: docker-image
+    source:
+      repository: openstax/content-event-resource
+      tag: 0.1.0
+
+resources:
+
+  - name: content-events-queued
+    type: content-events
+    source:
+      api_root: http://content-events-api:5000
+      status: queued
+
+jobs:
+  - name: test-queue
+    plan:
+      - get: content-events-queued
+        trigger: true
+      - task: show-queued
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: debian
+          inputs:
+            - name: content-events-queued
+          run:
+            path: cat
+            args: [content-events-queued/event.json]
+

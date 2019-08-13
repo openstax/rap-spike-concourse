@@ -7,9 +7,11 @@ Exploring Concourse-CI’s (Continuous Integration) queue resource for use in th
   * [Requirements](#you-will-need)
   * [Clone the Git repo](#clone-the-git-repo)
   * [Run the services with Docker compose](#run-the-services-with-docker-compose)
+  * [Initialize DB on first run](#initialize-db-on-first-run)
 * [Access the services](#access-services)
   * [RabbitMQ](#rabbitmq)
   * [Concourse](#concourse)
+  * [Content Event API](#content-event-api-via-flask)
   * [PostgreSQL](#postgres)
 * [S3 access for debugging](#s3-access-for-debugging)
   * [Get your S3 credentials](#get-your-s3-credentials)
@@ -18,6 +20,12 @@ Exploring Concourse-CI’s (Continuous Integration) queue resource for use in th
   * [How to use rclone](#how-to-use-rclone)
   * [How to mount a bucket into your local filesystem with FUSE](#how-to-mount-a-bucket-into-your-local-filesystem-with-fuse)
   * [Mac and Cyberduck](#mac-and-cyberduck)
+* [Concourse](#concourse)
+  * [`fly` commands](#fly-commands)
+    * [Create a target](#create-a-target)
+    * [Add a pipeline](#add-a-pipeline)
+  * [Pipelines](#pipelines)
+  * [Content event resource](#content-event-resource)
 
 
 ## Setup the development environment
@@ -93,7 +101,7 @@ username: test
 password: test
 ```
 
-#### Content Event API via FLASK
+### Content Event API via FLASK
 
 1. See events:
 ```
@@ -102,7 +110,7 @@ curl localhost:5000/events
 
 2. Add event:
 ```
-$ curl -d '{"ident_hash": "0889907c-f0ef-496a-bcb8-2a5bb121717f"}' -H "Content-Type: application/json" -X POST http://localhost:5000/events
+curl -d '{"ident_hash": "0889907c-f0ef-496a-bcb8-2a5bb121717f", "status": "queued"}' -H "Content-Type: application/json" -X POST http://localhost:5000/events
 ```
 
 3. See event:
@@ -110,7 +118,7 @@ $ curl -d '{"ident_hash": "0889907c-f0ef-496a-bcb8-2a5bb121717f"}' -H "Content-T
 $ curl localhost:5000/events/<id>
 ```
 
-#### Postgres
+### Postgres
 Log in with psql shell to cnx-db
 
     make sql
@@ -260,6 +268,36 @@ On macOS there is a very easy to use UI interface for accessing S3 buckets and a
 It's free and easy to use: [CyberDuck][cyberduck]
 
 I don't write a specific guide for Cyberduck because it is self explanatory and works quite similar to FTP programs.
+
+## Concourse
+
+### `fly` commands
+
+In order to use of pipelines you must first create a target for your Concourse instance.
+
+#### Create a target
+
+    fly --target dev login --concourse-url http://0.0.0.0:8080 -u test -p test
+
+You will need to unpause a newly created pipeline. The output for the command
+will provide you with options.
+
+#### Add a pipeline
+
+    fly -t dev set-pipeline -p publish-pipeline -c concourse/show-queued-pipeline.yml
+
+To update a pipeline you can use the same command to add a pipeline. You will be
+shown a diff of the server held pipeline and your changes.
+
+### Pipelines
+
+Pipelines for this repository are contained in the [concourse](./concourse) folder.
+
+### Content event resource
+
+Access the [README.md](./concourse/content-event-resource/README.md) in the content event resource directory.
+
+If you are doing development for the resource it's helpful to change into the directory.
 
 [git]: https://git-scm.com
 [docker-ce]: https://docs.docker.com/install

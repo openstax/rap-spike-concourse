@@ -27,6 +27,8 @@ services:
       CONCOURSE_ADD_LOCAL_USER: test:test
       CONCOURSE_MAIN_TEAM_LOCAL_USER: test
       CONCOURSE_WORKER_BAGGAGECLAIM_DRIVER: overlay
+    links:
+      - content-events-api
 
   cnx-rabbitmq:
     image: rabbitmq:3-management
@@ -52,6 +54,7 @@ services:
       - ./api:/code
     environment:
       FLASK_ENV: development
+      FLASK_DEBUG: 1
       FLASK_APP: app.py
       FLASK_RUN_HOST: 0.0.0.0
 
