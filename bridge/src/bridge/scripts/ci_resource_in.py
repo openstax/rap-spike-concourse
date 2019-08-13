@@ -6,7 +6,7 @@ from datetime import datetime
 import psycopg2
 
 from ..concourse import concourse_method
-from ..utils import get_resources
+from ..utils import get_resources, get_content, ContentNotFoundError
 
 
 def gen_resource_filepath(dest_dir, sha1):
@@ -44,6 +44,15 @@ def main(input_, environ, args):
                 with gen_resource_metadata_filepath(dest_dir, sha1).open(
                         'w') as f:
                     json.dump(metadata, f)
+
+            # Store the module metadata in a json file
+            try:
+                content = get_content(cursor, ident_hash)
+            except ContentNotFoundError as e:
+                sys.stderr.write(str(e) + '\n')
+                sys.exit(1)
+            with (dest_dir / 'archive-response.raw.json').open('w') as f:
+                f.write(json.dumps(content, sort_keys=True, indent=2))
 
     version = {'timestamp': str(datetime.now().timestamp())}
     output = {
