@@ -1,0 +1,51 @@
+---
+
+###
+#  Resources
+###
+
+resources:
+  - name: content
+    type: bridge-resource
+    source:
+      db: postgresql://rhaptos@cnx-db/repository
+
+###
+#  Resource Types
+###
+
+resource_types:
+  - name: bridge-resource
+    type: docker-image
+    source:
+      repository: openstax/rap-spike-bridge
+      tag: latest
+
+###
+#  Pipeline Jobs
+###
+
+jobs:
+  - name: extract-content
+    public: true
+    plan:
+      - get: content
+        params:
+          # Points to the Elementary Alegebra Preface
+          ident_hash: "4b5aaf32-1de1-419b-bdc0-4e0a7f6daf0f@27"
+      - task: print-cnxml
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: alpine
+          inputs:
+            - name: content
+          run:
+            path: sh
+            args:
+              - -c
+              - |
+                ls -lah content
+                cat content/d9f43d2e5393356e06c755ff947bd31327fa5edc

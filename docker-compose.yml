@@ -58,5 +58,11 @@ services:
       FLASK_APP: app.py
       FLASK_RUN_HOST: 0.0.0.0
 
+  bridge-resource:
+    build: bridge/
+    command: tail -f /dev/null
+    volumes:
+      - ./bridge/src/bridge:/usr/local/lib/python3.7/site-packages/bridge
+
 volumes:
   pg-data:
