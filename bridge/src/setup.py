@@ -40,15 +40,13 @@ SETUP_KWARGS = dict(
 
 setup(
     name='bridge',
-    version='0.0.0',
+    version='1.0.0',
     author='OpenStax',
     url="https://github.com/openstax",
     license='LGPL',
     entry_points="""\
     [console_scripts]
-    bridge--check = bridge.scripts.ci_resource_check:main
-    bridge--in = bridge.scripts.ci_resource_in:main
-    bridge--out = bridge.scripts.ci_resource_out:main
+    bridge = bridge.script:main
     """,
     **SETUP_KWARGS,
 )
