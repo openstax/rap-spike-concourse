@@ -1,4 +1,5 @@
 import os
+import boto3
 from pathlib import Path
 
 import cnxdb
@@ -88,3 +89,14 @@ def get_resources(cursor, ident_hash):
     for resource in cursor.fetchall():
         yield resource[0], resource[1], dict(
             zip(('filename', 'media_type'), resource[2:]))
+
+
+def save_to_s3(filename):
+    bucket = os.environ.get('BRIDGE_AWS_BUCKET')
+    object_name = os.path.basename(object_name)
+    s3 = boto3.resource('s3')
+    try:
+        s3.upload_file(filename, bucket, object_name)
+    except ClientError as e:
+        raise ContentNotFoundError(
+            'Upload error when uploading {}'.format(filename))
