@@ -1,27 +1,6 @@
 ---
 
 ###
-#  Resources
-###
-
-resources:
-  - name: content
-    type: bridge-resource
-    source:
-      db: postgresql://rhaptos@cnx-db/repository
-
-###
-#  Resource Types
-###
-
-resource_types:
-  - name: bridge-resource
-    type: docker-image
-    source:
-      repository: openstax/rap-spike-bridge
-      tag: latest
-
-###
 #  Pipeline Jobs
 ###
 
@@ -29,11 +8,52 @@ jobs:
   - name: extract-content
     public: true
     plan:
-      - get: content
-        params:
-          # Points to the Elementary Alegebra Preface
-          ident_hash: "4b5aaf32-1de1-419b-bdc0-4e0a7f6daf0f@27"
-      - task: print-cnxml
+
+      # mock the identifier-struct (data structure coming from the content-event-resource)
+      - task: mock-identifier-struct
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: alpine
+          outputs:
+            - name: mock-struct
+          params:
+            IDENT_HASH: "4b5aaf32-1de1-419b-bdc0-4e0a7f6daf0f@27"
+          run:
+            path: sh
+            args:
+              - -c
+              - |
+                touch mock-struct/id
+                echo $IDENT_HASH > mock-struct/ident_hash
+                touch mock-struct/event.json
+
+      - task: extraction
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: openstax/rap-spike-bridge
+              tag: latest
+          params:
+            DB_URL: "postgresql://rhaptos@cnx-db/repository"
+          inputs:
+            - name: mock-struct
+          outputs:
+            - name: content
+          run:
+            path: sh
+            args:
+              - -c
+              - |
+                ls -lah mock-struct
+                cp mock-struct/ident_hash content/
+                bridge extract $(cat mock-struct/ident_hash) -o content/
+
+      - task: print
         config:
           platform: linux
           image_resource:
@@ -49,3 +69,5 @@ jobs:
               - |
                 ls -lah content
                 cat content/d9f43d2e5393356e06c755ff947bd31327fa5edc
+                echo '--------------------'
+                cat content/archive-response.raw.json
