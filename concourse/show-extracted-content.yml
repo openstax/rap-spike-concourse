@@ -37,7 +37,8 @@ jobs:
             type: docker-image
             source:
               repository: openstax/rap-spike-bridge
-              tag: latest
+              # tag: latest
+              tag: 1.0.0
           params:
             DB_URL: "postgresql://rhaptos@cnx-db/repository"
           inputs:
