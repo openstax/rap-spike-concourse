@@ -6,6 +6,7 @@ Exploring Concourse-CI’s (Continuous Integration) queue resource for use in th
 * [Setup the development environment](#setup-the-development-environment)
   * [Requirements](#you-will-need)
   * [Clone the Git repo](#clone-the-git-repo)
+  * [Setup S3 before running Docker Compose](#setup-s3-before-running-docker-compose)
   * [Run the services with Docker compose](#run-the-services-with-docker-compose)
   * [Initialize DB on first run](#initialize-db-on-first-run)
 * [Access the services](#access-services)
@@ -43,6 +44,27 @@ Exploring Concourse-CI’s (Continuous Integration) queue resource for use in th
 This will download the code into a `rap-spike-concourse` directory. You will need to be in  the `rap-spike-concourse` directory for the remainder of the installation process.
 
     cd rap-spike-concourse
+
+### Setup S3 before running Docker Compose
+
+Get your S3 credentials according to this [chapter](#s3-access-for-debugging) and insert your credentials in a file named
+
+```
+docker-compose.override.yml
+```
+
+the file should content should look like this:
+
+```yml
+version: '3'
+
+services:
+  bridge-resource:
+    environment:
+      - AWS_ACCESS_KEY_ID=youraccesskeyhere
+      - AWS_SECRET_ACCESS_KEY=yoursecretaccesskeyhere
+```
+
 
 ### Run the services with Docker Compose
 

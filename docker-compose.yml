@@ -61,6 +61,9 @@ services:
   bridge:
     build: bridge/
     command: tail -f /dev/null
+    environment:
+      - BRIDGE_AWS_REGION=us-east-2
+      - BRIDGE_AWS_BUCKET=ce-rap-test
     volumes:
       - ./bridge/src/bridge:/usr/local/lib/python3.7/site-packages/bridge
 
