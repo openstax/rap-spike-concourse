@@ -79,6 +79,8 @@ jobs:
                 cp mock-struct/ident_hash content/
                 bridge extract $(cat mock-struct/ident_hash) -o content/
       - put: storage
+        inputs:
+          - content
 
       - task: print
         config:
