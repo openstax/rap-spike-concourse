@@ -1,0 +1,90 @@
+---
+
+###
+#  Resources
+###
+
+resources:
+
+  - name: events
+    type: content-events
+    source:
+      api_root: http://content-events-api:5000
+      status: queued
+
+  - name: bridge
+    type: docker-image
+    source:
+      repository: openstax/rap-spike-bridge
+      tag: latest
+
+  # remember to use `fly ... -l credentials.yml` for these parameters
+  - name: s3
+    type: s3-simple
+    source:
+      access_key_id: ((aws-access-key))
+      secret_access_key: ((aws-secret-key))
+      bucket: ((s3bucket))
+      region: ((s3region))
+
+###
+#  Resource Types
+###
+
+resource_types:
+
+  - name: content-events
+    type: docker-image
+    source:
+      repository: openstax/content-event-resource
+      tag: 0.1.0
+
+  - name: s3-simple
+    type: docker-image
+    source:
+      repository: 18fgsa/s3-resource-simple
+
+###
+#  Pipeline Jobs
+###
+
+jobs:
+
+  - name: pulling-content-into-s3
+    plan:
+
+      - get: events
+        trigger: true
+        version: every
+
+      - get: bridge
+
+      - task: extraction
+        image: bridge
+        file: bridge/rootfs/tasks/extract-content.yml
+        vars:
+          db_url: "postgresql://rhaptos@cnx-db/repository"
+        input_mapping:
+          identifier-struct: events
+        output_mapping:
+          content: content
+
+      - task: debug-print
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: alpine
+          inputs:
+            - name: content
+          run:
+            path: sh
+            args:
+              - -c
+              - |
+                ls -lah content
+                cat content/archive-response.raw.json
+
+      - put: s3
+        inputs: [content]
