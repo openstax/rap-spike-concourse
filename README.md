@@ -313,10 +313,6 @@ shown a diff of the server held pipeline and your changes.
 
     fly -t dev set-pipeline -p test-s3-dummy -c concourse/test-s3-dummydata.yml -l credentials.yml
 
-#### Testing whole example pipeline for extracting content and save to S3
-
-    fly -t dev set-pipeline -p extract-content-s3 -c concourse/extract-content-s3.yml -l credentials.yml
-
 ### Pipelines
 
 Pipelines for this repository are contained in the [concourse](./concourse) folder.
