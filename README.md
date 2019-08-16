@@ -58,6 +58,7 @@ the file should content should look like this:
 ```yml
 aws-access-key: samplekey
 aws-secret-key: samplesecret
+s3bucket: ce-rap-test
 ```
 
 
