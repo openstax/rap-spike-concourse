@@ -12,7 +12,7 @@ resources:
     access_key_id: ((aws-access-key))
     secret_access_key: ((aws-secret-key))
     bucket: ((s3bucket))
-    region: us-east-2
+    region: ((s3region))
 
 jobs:
 - name: job-test-s3
