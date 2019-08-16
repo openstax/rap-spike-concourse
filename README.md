@@ -6,6 +6,7 @@ Exploring Concourse-CI’s (Continuous Integration) queue resource for use in th
 * [Setup the development environment](#setup-the-development-environment)
   * [Requirements](#you-will-need)
   * [Clone the Git repo](#clone-the-git-repo)
+  * [Setup S3 before running Docker Compose](#setup-s3-before-running-docker-compose)
   * [Run the services with Docker compose](#run-the-services-with-docker-compose)
   * [Initialize DB on first run](#initialize-db-on-first-run)
 * [Access the services](#access-services)
@@ -43,6 +44,24 @@ Exploring Concourse-CI’s (Continuous Integration) queue resource for use in th
 This will download the code into a `rap-spike-concourse` directory. You will need to be in  the `rap-spike-concourse` directory for the remainder of the installation process.
 
     cd rap-spike-concourse
+
+### Setup S3 before running Docker Compose
+
+Get your S3 credentials according to this [chapter](#s3-access-for-debugging) and insert your credentials in a file named
+
+```
+credentials.yml
+```
+
+the file should content should look like this:
+
+```yml
+aws-access-key: samplekey
+aws-secret-key: samplesecret
+s3bucket: ce-rap-test
+s3region: us-east-2
+```
+
 
 ### Run the services with Docker Compose
 
@@ -288,6 +307,14 @@ will provide you with options.
 
 To update a pipeline you can use the same command to add a pipeline. You will be
 shown a diff of the server held pipeline and your changes.
+
+#### Test S3 pipeline with dummy data
+
+    fly -t dev set-pipeline -p test-s3-dummy -c concourse/test-s3-dummydata.yml -l credentials.yml
+
+#### Testing whole example pipeline for extracting content and save to S3
+
+    fly -t dev set-pipeline -p extract-content-s3 -c concourse/extract-content-s3.yml -l credentials.yml
 
 ### Pipelines
 
