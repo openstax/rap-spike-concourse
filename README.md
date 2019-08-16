@@ -59,6 +59,7 @@ the file should content should look like this:
 aws-access-key: samplekey
 aws-secret-key: samplesecret
 s3bucket: ce-rap-test
+s3region: us-east-2
 ```
 
 
@@ -333,4 +334,4 @@ If you are doing development for the resource it's helpful to change into the di
 [rcloneinstall]: https://rclone.org/install/
 [awsconsole]: https://openstax-dev-sandbox.signin.aws.amazon.com/console
 [macosfuse]: https://osxfuse.github.io/
-[cyberduck]: https://cyberduck.io/ 
+[cyberduck]: https://cyberduck.io/
