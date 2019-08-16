@@ -54,7 +54,7 @@ jobs:
                 echo $IDENT_HASH > mock-struct/ident_hash
                 touch mock-struct/event.json
 
-      - task: extraction
+      - task: extraction-s3
         config:
           platform: linux
           image_resource:
