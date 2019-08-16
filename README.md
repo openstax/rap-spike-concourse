@@ -307,9 +307,13 @@ will provide you with options.
 To update a pipeline you can use the same command to add a pipeline. You will be
 shown a diff of the server held pipeline and your changes.
 
-#### Test S3 pipeline
+#### Test S3 pipeline with dummy data
 
     fly -t dev set-pipeline -p test-s3-dummy -c concourse/test-s3-dummydata.yml -l credentials.yml
+
+#### Testing whole example pipeline for extracting content and save to S3
+
+    fly -t dev set-pipeline -p extract-content-s3 -c concourse/extract-content-s3.yml -l credentials.yml
 
 ### Pipelines
 
