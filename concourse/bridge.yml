@@ -6,14 +6,20 @@
 
 resources:
 
+  - name: events
+    type: content-events
+    source:
+      api_root: http://content-events-api:5000
+      status: queued
+
   - name: bridge
     type: docker-image
     source:
       repository: openstax/rap-spike-bridge
-      # tag: latest
-      tag: 1.1.0
+      tag: latest
 
-  - name: storage
+  # remember to use `fly ... -l credentials.yml` for these parameters
+  - name: s3
     type: s3-simple
     source:
       access_key_id: ((aws-access-key))
@@ -21,12 +27,18 @@ resources:
       bucket: ((s3bucket))
       region: ((s3region))
 
-
 ###
 #  Resource Types
 ###
 
 resource_types:
+
+  - name: content-events
+    type: docker-image
+    source:
+      repository: openstax/content-event-resource
+      tag: 0.1.0
+
   - name: s3-simple
     type: docker-image
     source:
@@ -36,33 +48,14 @@ resource_types:
 #  Pipeline Jobs
 ###
 
-# Extended concourse/show-extracted-content.yml with uploading the files to s3
-
 jobs:
-  - name: extract-content-s3
-    public: true
+
+  - name: pulling-content-into-s3
     plan:
 
-      # mock the identifier-struct (data structure coming from the content-event-resource)
-      - task: mock-identifier-struct
-        config:
-          platform: linux
-          image_resource:
-            type: docker-image
-            source:
-              repository: alpine
-          outputs:
-            - name: mock-struct
-          params:
-            IDENT_HASH: "4b5aaf32-1de1-419b-bdc0-4e0a7f6daf0f@27"
-          run:
-            path: sh
-            args:
-              - -c
-              - |
-                touch mock-struct/id
-                echo $IDENT_HASH > mock-struct/ident_hash
-                touch mock-struct/event.json
+      - get: events
+        trigger: true
+        version: every
 
       - get: bridge
 
@@ -72,15 +65,11 @@ jobs:
         vars:
           db_url: "postgresql://rhaptos@cnx-db/repository"
         input_mapping:
-          identifier-struct: mock-struct
+          identifier-struct: events
         output_mapping:
           content: content
 
-      - put: storage
-        inputs:
-          - content
-
-      - task: print
+      - task: debug-print
         config:
           platform: linux
           image_resource:
@@ -95,6 +84,7 @@ jobs:
               - -c
               - |
                 ls -lah content
-                cat content/d9f43d2e5393356e06c755ff947bd31327fa5edc
-                echo '--------------------'
                 cat content/archive-response.raw.json
+
+      - put: s3
+        inputs: [content]

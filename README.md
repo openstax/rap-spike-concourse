@@ -27,6 +27,7 @@ Exploring Concourse-CI’s (Continuous Integration) queue resource for use in th
     * [Add a pipeline](#add-a-pipeline)
   * [Pipelines](#pipelines)
   * [Content event resource](#content-event-resource)
+* [End Result](#end-result)
 
 
 ## Setup the development environment
@@ -129,7 +130,7 @@ curl localhost:5000/events
 
 2. Add event:
 ```
-curl -d '{"ident_hash": "0889907c-f0ef-496a-bcb8-2a5bb121717f", "status": "queued"}' -H "Content-Type: application/json" -X POST http://localhost:5000/events
+curl -d '{"ident_hash": "4b5aaf32-1de1-419b-bdc0-4e0a7f6daf0f@27", "status": "queued"}' -H "Content-Type: application/json" -X POST http://localhost:5000/events
 ```
 
 3. See event:
@@ -312,10 +313,6 @@ shown a diff of the server held pipeline and your changes.
 
     fly -t dev set-pipeline -p test-s3-dummy -c concourse/test-s3-dummydata.yml -l credentials.yml
 
-#### Testing whole example pipeline for extracting content and save to S3
-
-    fly -t dev set-pipeline -p extract-content-s3 -c concourse/extract-content-s3.yml -l credentials.yml
-
 ### Pipelines
 
 Pipelines for this repository are contained in the [concourse](./concourse) folder.
@@ -335,3 +332,17 @@ If you are doing development for the resource it's helpful to change into the di
 [awsconsole]: https://openstax-dev-sandbox.signin.aws.amazon.com/console
 [macosfuse]: https://osxfuse.github.io/
 [cyberduck]: https://cyberduck.io/
+
+## End Result
+
+The end result of all this is an implementation of what could constitute the Bridge section of Refactor Archive. We don't use a live database with publications in this, but our use of `curl` to introduce an event (aka publication) into the system is a sufficient abstraction.
+
+1. First of all, set up an S3 bucket for yourself using the instructions in this document.
+1. `cp credentials.yml.template credentials.yml`
+1. Edit `credentials.yml` to include your S3 bucket information
+1. Make sure you're `fly` client is logged into concourse (we use the `-t dev` target option in these examples)
+1. `fly -t dev sp -p bridge -c concourse/bridge.yml -l credentials.yml`
+1. Create an event: `curl -d '{"ident_hash": "4b5aaf32-1de1-419b-bdc0-4e0a7f6daf0f@27", "status": "queued"}' -H "Content-Type: application/json" -X POST http://localhost:5000/events`
+1. Trigger the job and watch the output: `fly -t dev tj -j bridge/pulling-content-into-s3 -w`
+
+The last step isn't absolutely necessary since the pipeline is setup to watch for events. But doing this last step allows us to see the situation in a controlled way.
