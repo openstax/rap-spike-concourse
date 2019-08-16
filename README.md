@@ -50,19 +50,14 @@ This will download the code into a `rap-spike-concourse` directory. You will nee
 Get your S3 credentials according to this [chapter](#s3-access-for-debugging) and insert your credentials in a file named
 
 ```
-docker-compose.override.yml
+credentials.yml
 ```
 
 the file should content should look like this:
 
 ```yml
-version: '3'
-
-services:
-  bridge-resource:
-    environment:
-      - AWS_ACCESS_KEY_ID=youraccesskeyhere
-      - AWS_SECRET_ACCESS_KEY=yoursecretaccesskeyhere
+aws-access-key: samplekey
+aws-secret-key: samplesecret
 ```
 
 
@@ -311,6 +306,10 @@ will provide you with options.
 To update a pipeline you can use the same command to add a pipeline. You will be
 shown a diff of the server held pipeline and your changes.
 
+#### Test S3 pipeline
+
+    fly -t dev set-pipeline -p test-s3-dummy -c concourse/test-s3-dummydata.yml -l credentials.yml
+
 ### Pipelines
 
 Pipelines for this repository are contained in the [concourse](./concourse) folder.
@@ -329,4 +328,4 @@ If you are doing development for the resource it's helpful to change into the di
 [rcloneinstall]: https://rclone.org/install/
 [awsconsole]: https://openstax-dev-sandbox.signin.aws.amazon.com/console
 [macosfuse]: https://osxfuse.github.io/
-[cyberduck]: https://cyberduck.io/
+[cyberduck]: https://cyberduck.io/ 

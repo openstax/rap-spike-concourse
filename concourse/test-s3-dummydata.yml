@@ -1,0 +1,32 @@
+---
+resource_types:
+- name: s3-simple
+  type: docker-image
+  source:
+    repository: 18fgsa/s3-resource-simple
+
+resources:
+- name: remote
+  type: s3-simple
+  source:
+    access_key_id: ((aws-access-key))
+    secret_access_key: ((aws-secret-key))
+    bucket: ((s3bucket))
+    region: us-east-2
+
+jobs:
+- name: job-test-s3
+  plan:
+  - task: hello-world
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: busybox}
+      outputs:
+      - name: out
+
+      run:
+        path: /bin/sh
+        args: ["-c", "echo hello world >out/hello-world123.txt"]
+  - put: remote
