@@ -40,7 +40,7 @@ SETUP_KWARGS = dict(
 
 setup(
     name='bridge',
-    version='1.0.0',
+    version='1.1.0',
     author='OpenStax',
     url="https://github.com/openstax",
     license='LGPL',
