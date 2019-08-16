@@ -63,6 +63,7 @@ services:
     command: tail -f /dev/null
     volumes:
       - ./bridge/src/bridge:/usr/local/lib/python3.7/site-packages/bridge
+      - ./bridge/tasks:/tasks
 
 volumes:
   pg-data:
