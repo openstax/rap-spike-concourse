@@ -28,6 +28,8 @@ resource_types:
 #  Pipeline Jobs
 ###
 
+# Extended concourse/show-extracted-content.yml with uploading the files to s3
+
 jobs:
   - name: extract-content-s3
     public: true
@@ -54,15 +56,14 @@ jobs:
                 echo $IDENT_HASH > mock-struct/ident_hash
                 touch mock-struct/event.json
 
-      - task: extraction-s3
+      - task: extraction
         config:
           platform: linux
           image_resource:
             type: docker-image
             source:
               repository: openstax/rap-spike-bridge
-              # tag: latest
-              tag: 1.0.0
+              tag: latest
           params:
             DB_URL: "postgresql://rhaptos@cnx-db/repository"
           inputs:
