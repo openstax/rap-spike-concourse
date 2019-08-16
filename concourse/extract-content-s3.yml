@@ -77,18 +77,6 @@ jobs:
                 ls -lah mock-struct
                 cp mock-struct/ident_hash content/
                 bridge extract $(cat mock-struct/ident_hash) -o content/
-
-      - task: storage
-        config:
-          platform: linux
-          image_resource:
-            type: docker-image
-            source: {repository: busybox}
-          outputs:
-          - name: content
-          run:
-            path: /bin/sh
-            args: ["-c", "echo uploading to S3"]
       - put: remote
 
       - task: print
