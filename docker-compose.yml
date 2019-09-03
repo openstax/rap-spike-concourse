@@ -13,7 +13,7 @@ services:
     # Note, we use the concourse release candidate, because
     # the concourse/concourse image has a known flaw.
     # See also, https://github.com/concourse/concourse/issues/3758
-    image: concourse/concourse-rc
+    image: concourse/concourse-rc:5.4.0-rc.17
     command: quickstart
     privileged: true
     depends_on: [concourse-db]
@@ -29,12 +29,6 @@ services:
       CONCOURSE_WORKER_BAGGAGECLAIM_DRIVER: overlay
     links:
       - content-events-api
-
-  cnx-rabbitmq:
-    image: rabbitmq:3-management
-    ports:
-      - "5672:5672"
-      - "15672:15672"
 
   cnx-db:
     image: openstax/cnx-db:latest
