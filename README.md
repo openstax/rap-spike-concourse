@@ -419,3 +419,4 @@ The last step isn't absolutely necessary since the pipeline is setup to watch fo
 [awsconsole]: https://openstax-dev-sandbox.signin.aws.amazon.com/console
 [macosfuse]: https://osxfuse.github.io/
 [cyberduck]: https://cyberduck.io/
+[rap-spike-lambda]: https://github.com/openstax/rap-spike-lambda
