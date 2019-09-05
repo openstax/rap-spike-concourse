@@ -71,7 +71,7 @@ remove the database triggers from the database.
 
 ### Countermeasures / Cards (DO)
 
-* [Complete Concourse training](Complete Concourse training)
+* [Complete Concourse training](https://app.zenhub.com/workspace/o/openstax/cnx/issues/581)
 * [Write Content Event Resource to trigger the pipeline](https://app.zenhub.com/workspace/o/openstax/cnx/issues/633)
 * [Write a Content Event Service to be used by the Content Event Resource](https://app.zenhub.com/workspace/o/openstax/cnx/issues/637)
 * [Develop the one way bridge](https://app.zenhub.com/workspace/o/openstax/cnx/issues/622)
