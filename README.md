@@ -43,13 +43,13 @@ This spike's main purpose is if we can utilize Concourse to this end.
 
 In the current system CMs, Baking, and consumers all rely on the same database.
 
-[![image](https://user-images.githubusercontent.com/8730430/64211160-e841ea80-ce6a-11e9-9452-8c03ad7a0ff3.png)](https://sequencediagram.org/index.html#initialData=C4S2BsFMAIGEFcBOjIDtgCgMEMDGwB7ROAWSwAdtFRcRL0BzRA+c6AYnBAYAtgnsAT2gBRACZgQqBgHpYAEQByGaNDHZg2AEbYAzjABEABQK7+KXQeh7o8jdr2QV0StRC16waAYBC2ANZSDAA6qAAU5ILAPASo0Lq4iHTAAJRWNn6B0s6uNHTY6N5UuDwgAG6QAHS4qAAelUQM6brQAIKIJeVOaGJYOPhE3rCxuvAAtpCIoWEASiIAGjIAKvCEiDJG8gBiAOJoadYtAMyIYgC0uYJ9sCQAPGd2mjr6AFwzkMBJkBVwscBoXjCsEU8xIABkUhgbmcAHyPByvADK2B+w3QAKhJFh8OekBeJCo-mgWgIBCJNjEsScOMcsMyQReiM01GJASCGHp0jpbOkL0yTk5DGx9lxfICkDE0AAZiAoLoMCdzpdYe1OhUXlsPiVoLg-hjVaUKsKno4NVqeDq9egMEA)
+[![image](https://user-images.githubusercontent.com/8730430/64211160-e841ea80-ce6a-11e9-9452-8c03ad7a0ff3.png)](https://docs.google.com/document/d/1GW5VGrjKmIRw3nbFTIkBZgE0mlHD9ky2TJ_bSUIcJ_w/edit)
 
 ### Goal / Target Condition (PLAN)
 
 Create the "one-way" bridge as a concourse pipeline that can react to events and extract content/resources from the database and upload to S3.
 
-[![image](https://user-images.githubusercontent.com/8730430/64211419-ba10da80-ce6b-11e9-9537-f683f97b13ed.png)](https://sequencediagram.org/index.html#initialData=C4S2BsFMAIFEDsAmBaA4gewIbgFA8wMbDoBO0AwgLJ4AOmJoBId8wA5iegK43QDEAI0gg2kHNGh0GIJi2DQARLERgQ8NgB14ACkhsAdNAAK6AM7sSkUwHpUYAEqQa6AJQLomU3BWh1OSEi09IzMmKwc3Lx8NJCEABY0XABmSeKSwTKhrIoAQpgA1mpsxsyQ4GqQWroG0ATo8HVcJKaQ1gAqJJgAbiCmbh5eeYV+AYhB0rJhFpH85WxxwALgXGISUiFyigAivcAkIAJcoPVVeoYAygDM-Z4UWwBy-oH4RKSK5PWmXAC2kCRV9lgAA12kdSNYjFsAGKoAI3LyXEgodYATzwOCoAB5kMpVOoAFyOPYgSBdGAfVgBeTacj3IGUAAyLgxlGQAD5cb42Pjzt1yfVgFSWezOUV8ZR6PloAJ0OgpbdEPUxJAAB4sRCYJaQZDQADy8G1AHVMCjoDl9ohRDhRep2UMxfd0KAkqaDQB3WoCqlaDxdTAgcCaqBPMb221ssPcoZiSPs8gPfFbJVmgpFDEPdmI5HBFH4x3O12QD11SmsH3df2BrU4LPIVFxhNQyDAAhxT2l4A4IA)
+[![image](https://user-images.githubusercontent.com/8730430/64211419-ba10da80-ce6b-11e9-9537-f683f97b13ed.png)](https://docs.google.com/document/d/1GW5VGrjKmIRw3nbFTIkBZgE0mlHD9ky2TJ_bSUIcJ_w/edit)
 
 ### Root Cause Analysis (PLAN)
 
