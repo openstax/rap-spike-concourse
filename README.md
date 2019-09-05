@@ -2,7 +2,14 @@
 Exploring Concourse-CI’s (Continuous Integration) queue resource for use in the final product of Refactor Archive.
 
 ## Table of Contents
-
+* [A3 Planning](#a3-planning)
+  * [Background](#background-plan)
+  * [Current Condition](#current-condition-plan)
+  * [Goal / Target Condition](#goal--target-condition-plan)
+  * [Root Cause Analysis](#root-cause-analysis-plan)
+  * [Countermeasures / Cards](#countermeasures--cards-do)
+  * [Confirmation](#confirmation-check)
+  * [Follow up](#follow-up-act)
 * [Setup the development environment](#setup-the-development-environment)
   * [Requirements](#you-will-need)
   * [Clone the Git repo](#clone-the-git-repo)
@@ -29,6 +36,71 @@ Exploring Concourse-CI’s (Continuous Integration) queue resource for use in th
   * [Content event resource](#content-event-resource)
 * [End Result](#end-result)
 
+## A3 Planning
+
+### Background (PLAN)
+
+This spike is an experiment in itself to test the viability of using the Concourse CI system to react
+to publishing events from cnx-db and conduct work using the concept of a pipeline. The work
+primarily consists of extracting content from the database and uploading it to Amazon S3.
+
+This spike's main purpose is if we can utilize Concourse to this end.
+
+### Current condition (PLAN)
+
+In the current system CMs, Baking, and consumers all rely on the same database.
+
+[![image](https://user-images.githubusercontent.com/8730430/64211160-e841ea80-ce6a-11e9-9452-8c03ad7a0ff3.png)](https://docs.google.com/document/d/1GW5VGrjKmIRw3nbFTIkBZgE0mlHD9ky2TJ_bSUIcJ_w/edit)
+
+### Goal / Target Condition (PLAN)
+
+Create the "one-way" bridge as a concourse pipeline that can react to events and extract content/resources from the database and upload to S3.
+
+[![image](https://user-images.githubusercontent.com/8730430/64211419-ba10da80-ce6b-11e9-9537-f683f97b13ed.png)](https://docs.google.com/document/d/1GW5VGrjKmIRw3nbFTIkBZgE0mlHD9ky2TJ_bSUIcJ_w/edit)
+
+### Root Cause Analysis (PLAN)
+
+Root cause analysis done at length within the Refactor Archive Technical Design Document (TDD).
+
+In summary, there are complications due to archive supplying content in various states ie. raw, baked, unbaked, etc.
+The various states of the content rely on transformations that are done via database triggers. If we 
+can extract the content to s3 via events from a database we can later serve the content statically (see [rap-spike-lambda][rap-spike-lambda]).
+
+Once published content is able to be served statically and is no longer in the database we can start to
+remove the database triggers from the database.
+
+### Countermeasures / Cards (DO)
+
+* [Complete Concourse training](https://app.zenhub.com/workspace/o/openstax/cnx/issues/581)
+* [Write Content Event Resource to trigger the pipeline](https://app.zenhub.com/workspace/o/openstax/cnx/issues/633)
+* [Write a Content Event Service to be used by the Content Event Resource](https://app.zenhub.com/workspace/o/openstax/cnx/issues/637)
+* [Develop the one way bridge](https://app.zenhub.com/workspace/o/openstax/cnx/issues/622)
+* [Setup s3 for the team](https://app.zenhub.com/workspace/o/openstax/cnx/issues/638)
+* [Place module data files in s3 aka "use the bridge"](https://app.zenhub.com/workspace/o/openstax/cnx/issues/623)
+
+### Confirmation (CHECK)
+
+1. Follow [development instructions](#setup-the-development-environment)
+2. [Setup s3](#s3-access-for-debugging) for local dev
+3. [Add an event](#content-event-api-via-flask) to the Content Event Resource
+4. ?
+5. PROFIT (Check s3)
+
+### Follow up (ACT)
+
+There was a decision made at the beginning of the spike to not build out the 
+database to message queue connector that would trigger the resource. In the place
+of the message queue we implemented a [Content Event Service](#content-event-api-via-flask) that returns events
+in a state that could be used by the [Content Event Resource](#content-event-resource).
+
+The scope of the spike was to see if we could extract content/resources from the database. 
+A proper followup would be to see if we could extract an entire book.
+
+In summary,
+
+1. Determine if we want to continue to try to use a message queue like RabbitMQ directly or further
+develop the Content Event Service which could use RabbitMQ indirectly.
+2. Extract an entire book and other possible use cases w/ the one way bridge pipeline.
 
 ## Setup the development environment
 
@@ -323,16 +395,6 @@ Access the [README.md](./concourse/content-event-resource/README.md) in the cont
 
 If you are doing development for the resource it's helpful to change into the directory.
 
-[git]: https://git-scm.com
-[docker-ce]: https://docs.docker.com/install
-[docker-compose]: https://docs.docker.com/compose
-[docker-install]: https://docs.docker.com/compose/install
-[rclone]: https://rclone.org
-[rcloneinstall]: https://rclone.org/install/
-[awsconsole]: https://openstax-dev-sandbox.signin.aws.amazon.com/console
-[macosfuse]: https://osxfuse.github.io/
-[cyberduck]: https://cyberduck.io/
-
 ## End Result
 
 The end result of all this is an implementation of what could constitute the Bridge section of Refactor Archive. We don't use a live database with publications in this, but our use of `curl` to introduce an event (aka publication) into the system is a sufficient abstraction.
@@ -346,3 +408,15 @@ The end result of all this is an implementation of what could constitute the Bri
 1. Trigger the job and watch the output: `fly -t dev tj -j bridge/pulling-content-into-s3 -w`
 
 The last step isn't absolutely necessary since the pipeline is setup to watch for events. But doing this last step allows us to see the situation in a controlled way.
+
+
+[git]: https://git-scm.com
+[docker-ce]: https://docs.docker.com/install
+[docker-compose]: https://docs.docker.com/compose
+[docker-install]: https://docs.docker.com/compose/install
+[rclone]: https://rclone.org
+[rcloneinstall]: https://rclone.org/install/
+[awsconsole]: https://openstax-dev-sandbox.signin.aws.amazon.com/console
+[macosfuse]: https://osxfuse.github.io/
+[cyberduck]: https://cyberduck.io/
+[rap-spike-lambda]: https://github.com/openstax/rap-spike-lambda
