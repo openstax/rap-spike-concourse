@@ -29,6 +29,36 @@ Exploring Concourse-CI’s (Continuous Integration) queue resource for use in th
   * [Content event resource](#content-event-resource)
 * [End Result](#end-result)
 
+## A3 Problem Solving
+
+### Background (PLAN)
+
+This spike is an experiment in itself to test the viability of using the Concourse CI system to react
+to publishing events from cnx-db and conduct work using the concept of a pipeline. The work
+primarily consists of extracting content from the database and uploading it to Amazon S3.
+
+This spike's main purpose is if we can utilize Concourse to this end.
+
+### Current condition (PLAN)
+
+In the current system CMs, Baking, and consumers all rely on the same database.
+
+![image](https://user-images.githubusercontent.com/8730430/64211160-e841ea80-ce6a-11e9-9452-8c03ad7a0ff3.png)
+
+### Goal / Target Condition (PLAN)
+
+Create the "one-way" bridge as a concourse pipeline that can react to events and extract content/resources from the database and upload to S3.
+
+![image](https://user-images.githubusercontent.com/8730430/64211419-ba10da80-ce6b-11e9-9537-f683f97b13ed.png)
+
+### Root Cause Analysis (PLAN)
+
+
+### Countermeasures (DO)
+
+### Confirmation (CHECK)
+
+### Follow up (ACT)
 
 ## Setup the development environment
 
