@@ -26,6 +26,8 @@ resources:
       secret_access_key: ((aws-secret-key))
       bucket: ((s3bucket))
       region: ((s3region))
+      options:
+        - --exclude='*.metadata.json'
 
 ###
 #  Resource Types
@@ -96,3 +98,28 @@ jobs:
         inputs:
           - contents
           - resources
+
+      - task: fix up resource content-types -_-
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: 18fgsa/s3-resource-simple
+          inputs:
+            - name: resources
+          run:
+            path: sh
+            args:
+              - -c
+              - |
+                for meta in resources/*.metadata.json
+                do
+                  content_type="$(python3 -c "import json; print(json.load(open('$meta'))['media_type'])")"
+                  filename=$(basename ${meta/.metadata.json/})
+                  aws s3api copy-object --bucket ((s3bucket)) --copy-source /((s3bucket))/resources/$filename --key resources/$filename --metadata-directive REPLACE --content-disposition=inline --content-type=$content_type --metadata "$(cat $meta)"
+                done
+          params:
+            AWS_ACCESS_KEY_ID: ((aws-access-key))
+            AWS_SECRET_ACCESS_KEY: ((aws-secret-key))
+            AWS_DEFAULT_REGION: ((s3region))
