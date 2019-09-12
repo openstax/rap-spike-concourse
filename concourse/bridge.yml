@@ -90,6 +90,7 @@ jobs:
                 ls -lah content
                 mv content/archive-response.raw.json contents/$(cat events/ident_hash).json
                 mv content/* resources/
+                wget -O "contents/$(cat events/ident_hash).html" "https://archive-staging.cnx.org/contents/$(cat events/ident_hash).html"
 
       - put: s3
         inputs:
