@@ -69,7 +69,7 @@ jobs:
         output_mapping:
           content: content
 
-      - task: debug-print
+      - task: separate contents and resources
         config:
           platform: linux
           image_resource:
@@ -78,13 +78,20 @@ jobs:
               repository: alpine
           inputs:
             - name: content
+            - name: events
+          outputs:
+            - name: contents
+            - name: resources
           run:
             path: sh
             args:
               - -c
               - |
                 ls -lah content
-                cat content/archive-response.raw.json
+                mv content/archive-response.raw.json contents/$(cat events/ident_hash).json
+                mv content/* resources/
 
       - put: s3
-        inputs: [content]
+        inputs:
+          - contents
+          - resources
