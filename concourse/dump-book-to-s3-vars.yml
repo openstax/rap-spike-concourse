@@ -1,0 +1,25 @@
+# The variables for dump-book-to-s3 pipeline
+#
+# This can be found in your app https://api.slack.com/apps
+# OAuth & Permissions
+slack-user-token: xoxo-12345
+slack-bot-token: xoxo-12345
+# On the web app, when you hover over a channel, the url looks like this:
+#     https://openstax.slack.com/messages/C0LA54Q5C
+# The bit after the last slash is the channel id
+slack-channel-id: C0LA54Q5C # content-engineering
+
+# the archive host from which to download the content
+archive-host: archive-staging.cnx.org
+
+# aws settings for boto3
+aws-access-key-id: XXXXXX
+aws-secret-access-key: XXXXX
+aws-default-region: us-east-1
+
+# the s3 bucket and region to store the content
+s3-bucket: ce-contents-rap-distribution-373045849756
+s3-region: us-east-1
+
+# the cloudfront site for the s3 bucket
+cloudfront-site: https://d1wws90x1inqtc.cloudfront.net

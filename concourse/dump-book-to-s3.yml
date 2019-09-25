@@ -1,0 +1,113 @@
+---
+# Use slack messages to trigger the dump script to download a book to an s3
+# bucket
+#
+# The slack message needs to be in the format:
+#     @ce-bot rap-spike get book <book-ident-hash>
+#
+# The variables are in dump-book-to-s3-vars.yml
+#
+# fly -t <target> sp -p dump-book-to-s3 -c dump-book-to-s3.yml -l dump-book-to-s3-vars.yml
+
+resource_types:
+  - name: slack-read-resource
+    type: docker-image
+    source:
+      repository: jakobleben/slack-read-resource
+
+  - name: slack-post-resource
+    type: docker-image
+    source:
+      repository: jakobleben/slack-post-resource
+
+resources:
+  - name: rap-spike-lambda
+    type: git
+    source:
+      uri: https://github.com/openstax/rap-spike-lambda.git
+
+  - name: ce-bot
+    type: slack-read-resource
+    source:
+      token: ((slack-user-token))
+      channel_id: ((slack-channel-id))
+      matching:
+        text_pattern: '^<@UNGRDU92M>\s+(.+)'
+
+  - name: ce-bot-message
+    type: slack-post-resource
+    source:
+      token: ((slack-bot-token))
+      channel_id: ((slack-channel-id))
+
+jobs:
+  - name: dump book to s3
+    public: true
+    plan:
+      - get: ce-bot
+        version: every
+        trigger: true
+        params:
+          text_pattern: 'rap-spike get book (\S+).*$'
+
+      - put: ce-bot-message
+        params:
+          message:
+            text: "Start dumping `{{ce-bot/text_part1}}` to s3 bucket `((s3-bucket))`"
+
+      - get: rap-spike-lambda
+
+      - task: run dump script
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: python
+              tag: 3.7-slim
+
+          inputs:
+            - name: rap-spike-lambda
+            - name: ce-bot
+
+          outputs:
+            - name: dump-book
+
+          run:
+            path: /bin/bash
+            args:
+              - -c
+              - |
+                set -x && \
+                apt-get update && apt-get install -y time && \
+                cd rap-spike-lambda/dump && \
+                pip install -r requirements.txt && \
+                /usr/bin/time -o ../../dump-book/time-used -f '\t%E' ./dump-to-bucket.py -v \
+                  -b $(cat ../../ce-bot/text_part1) \
+                  -h ((archive-host)) \
+                  --bucket ((s3-bucket)) \
+                  ((s3-region)) 2> >(tee ../../dump-book/stderr) && \
+                sed -i 's/:\(.*\)$/ mins \1 secs/' ../../dump-book/time-used
+
+          params:
+            AWS_ACCESS_KEY_ID: ((aws-access-key-id))
+            AWS_SECRET_ACCESS_KEY: ((aws-secret-access-key))
+            AWS_DEFAULT_REGION: ((aws-default-region))
+            TERM: linux
+            TERMINFO: /etc/terminfo
+
+        on_success:
+          put: ce-bot-message
+          params:
+            message:
+              text: "`{{ce-bot/text_part1}}` uploaded to s3 bucket `((s3-bucket))` in {{dump-book/time-used}}\nSee <((cloudfront-site))/baked/{{ce-bot/text_part1}}.html|((cloudfront-site))/baked/{{ce-bot/text_part1}}.html>"
+        on_failure:
+          put: ce-bot-message
+          params:
+            message:
+              text: |-
+                `{{ce-bot/text_part1}}` failed to upload to s3 bucket `((s3-bucket))`:
+
+                ```
+                {{dump-book/stderr}}
+                ```
