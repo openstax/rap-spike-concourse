@@ -28,11 +28,12 @@ resources:
 
   - name: ce-bot
     type: slack-read-resource
+    webhook_token: check-slack-now
     source:
       token: ((slack-user-token))
       channel_id: ((slack-channel-id))
       matching:
-        text_pattern: '^<@UNGRDU92M>\s+(.+)'
+        text_pattern: '^<@((slack-bot-user-id))>\s+rap-spike get book (.*)$'
 
   - name: ce-bot-message
     type: slack-post-resource
@@ -79,15 +80,20 @@ jobs:
               - -c
               - |
                 set -x && \
-                apt-get update && apt-get install -y time && \
+                apt-get update && apt-get install -y time wget jq && \
+                book_ident_hash=$(wget -q -O - '((cms-api-url))' | \
+                    jq -r '.items | map(select(.meta.slug == "'$(cat ce-bot/text_part1)'")) | .[0].cnx_id') && \
+                if [ "$book_ident_hash" == "null" ]; then book_ident_hash=$(cat ce-bot/text_part1); fi && \
                 cd rap-spike-lambda/dump && \
                 pip install -r requirements.txt && \
                 /usr/bin/time -o ../../dump-book/time-used -f '\t%E' ./dump-to-bucket.py -v \
-                  -b $(cat ../../ce-bot/text_part1) \
+                  -b $book_ident_hash \
                   -h ((archive-host)) \
                   --bucket ((s3-bucket)) \
                   ((s3-region)) 2> >(tee ../../dump-book/stderr) && \
-                sed -i 's/:\(.*\)$/ mins \1 secs/' ../../dump-book/time-used
+                sed -i 's/:\(.*\)$/ mins \1 secs/' ../../dump-book/time-used && \
+                echo -n $book_ident_hash >../../dump-book/book-ident-hash && \
+                echo -n $(wget -q -O - "https://((archive-host))/contents/$book_ident_hash.json" | jq '.title') >../../dump-book/title
 
           params:
             AWS_ACCESS_KEY_ID: ((aws-access-key-id))
@@ -100,7 +106,7 @@ jobs:
           put: ce-bot-message
           params:
             message:
-              text: "`{{ce-bot/text_part1}}` uploaded to s3 bucket `((s3-bucket))` in {{dump-book/time-used}}\nSee <((cloudfront-site))/baked/{{ce-bot/text_part1}}.html|((cloudfront-site))/baked/{{ce-bot/text_part1}}.html>"
+              text: "{{dump-book/title}} (`{{dump-book/book-ident-hash}}`) uploaded to s3 bucket `((s3-bucket))` in {{dump-book/time-used}}\nSee <((cloudfront-site))/baked/{{dump-book/book-ident-hash}}.html|((cloudfront-site))/baked/{{dump-book/book-ident-hash}}.html>"
         on_failure:
           put: ce-bot-message
           params:

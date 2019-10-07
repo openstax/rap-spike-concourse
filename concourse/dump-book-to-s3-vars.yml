@@ -8,9 +8,12 @@ slack-bot-token: xoxo-12345
 #     https://openstax.slack.com/messages/C0LA54Q5C
 # The bit after the last slash is the channel id
 slack-channel-id: C0LA54Q5C # content-engineering
+slack-bot-user-id: UNGRDU92M
 
 # the archive host from which to download the content
 archive-host: archive-staging.cnx.org
+# the openstax cms books api
+cms-api-url: https://staging.openstax.org/apps/cms/api/v2/pages/?type=books.Book&fields=cnx_id&format=json
 
 # aws settings for boto3
 aws-access-key-id: XXXXXX
