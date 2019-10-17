@@ -4,10 +4,6 @@
 # OAuth & Permissions
 slack-user-token: xoxo-12345
 slack-bot-token: xoxo-12345
-# On the web app, when you hover over a channel, the url looks like this:
-#     https://openstax.slack.com/messages/C0LA54Q5C
-# The bit after the last slash is the channel id
-slack-channel-id: C0LA54Q5C # content-engineering
 slack-bot-user-id: UNGRDU92M
 
 # the archive host from which to download the content

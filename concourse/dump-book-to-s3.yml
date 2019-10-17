@@ -10,15 +10,10 @@
 # fly -t <target> sp -p dump-book-to-s3 -c dump-book-to-s3.yml -l dump-book-to-s3-vars.yml
 
 resource_types:
-  - name: slack-read-resource
+  - name: slack
     type: docker-image
     source:
-      repository: jakobleben/slack-read-resource
-
-  - name: slack-post-resource
-    type: docker-image
-    source:
-      repository: jakobleben/slack-post-resource
+      repository: karenc/concourse-slack-resource
 
 resources:
   - name: rap-spike-lambda
@@ -27,19 +22,20 @@ resources:
       uri: https://github.com/openstax/rap-spike-lambda.git
 
   - name: ce-bot
-    type: slack-read-resource
+    type: slack
     webhook_token: check-slack-now
     source:
-      token: ((slack-user-token))
-      channel_id: ((slack-channel-id))
-      matching:
-        text_pattern: '^<@((slack-bot-user-id))>\s+rap-spike get book (.*)$'
+      user_access_token: ((slack-user-token))
+      bot_access_token: ((slack-bot-token))
+      bot_user_id: ((slack-bot-user-id))
+      regexp: '^<@((slack-bot-user-id))>\s+rap-spike get book (.*)$'
 
   - name: ce-bot-message
-    type: slack-post-resource
+    type: slack
     source:
-      token: ((slack-bot-token))
-      channel_id: ((slack-channel-id))
+      user_access_token: ((slack-user-token))
+      bot_access_token: ((slack-bot-token))
+      bot_user_id: ((slack-bot-user-id))
 
 jobs:
   - name: dump book to s3
@@ -48,13 +44,11 @@ jobs:
       - get: ce-bot
         version: every
         trigger: true
-        params:
-          text_pattern: 'rap-spike get book (\S+).*$'
 
       - put: ce-bot-message
         params:
-          message:
-            text: "Start dumping `{{ce-bot/text_part1}}` to s3 bucket `((s3-bucket))`"
+          text: "Start dumping `{{ce-bot/message_text_0}}` to s3 bucket `((s3-bucket))`"
+          channel: "{{ce-bot/channel}}"
 
       - get: rap-spike-lambda
 
@@ -82,8 +76,8 @@ jobs:
                 set -x && \
                 apt-get update && apt-get install -y time wget jq && \
                 book_ident_hash=$(wget -q -O - '((cms-api-url))' | \
-                    jq -r '.items | map(select(.meta.slug == "'$(cat ce-bot/text_part1)'")) | .[0].cnx_id') && \
-                if [ "$book_ident_hash" == "null" ]; then book_ident_hash=$(cat ce-bot/text_part1); fi && \
+                    jq -r '.items | map(select(.meta.slug == "'$(cat ce-bot/message_text_0)'")) | .[0].cnx_id') && \
+                if [ "$book_ident_hash" == "null" ]; then book_ident_hash=$(cat ce-bot/message_text_0); fi && \
                 cd rap-spike-lambda/dump && \
                 pip install -r requirements.txt && \
                 /usr/bin/time -o ../../dump-book/time-used -f '\t%E' ./dump-to-bucket.py -v \
@@ -105,15 +99,16 @@ jobs:
         on_success:
           put: ce-bot-message
           params:
-            message:
-              text: "{{dump-book/title}} (`{{dump-book/book-ident-hash}}`) uploaded to s3 bucket `((s3-bucket))` in {{dump-book/time-used}}\nSee <((cloudfront-site))/baked/{{dump-book/book-ident-hash}}.html|((cloudfront-site))/baked/{{dump-book/book-ident-hash}}.html>"
+            text: "{{dump-book/title}} (`{{dump-book/book-ident-hash}}`) uploaded to s3 bucket `((s3-bucket))` in {{dump-book/time-used}}\nSee <((cloudfront-site))/baked/{{dump-book/book-ident-hash}}.html|((cloudfront-site))/baked/{{dump-book/book-ident-hash}}.html>"
+            channel: "{{ce-bot/channel}}"
+
         on_failure:
           put: ce-bot-message
           params:
-            message:
-              text: |-
-                `{{ce-bot/text_part1}}` failed to upload to s3 bucket `((s3-bucket))`:
+            text: |-
+              `{{ce-bot/message_text_0}}` failed to upload to s3 bucket `((s3-bucket))`:
 
-                ```
-                {{dump-book/stderr}}
-                ```
+              ```
+              {{dump-book/stderr}}
+              ```
+            channel: "{{ce-bot/channel}}"
